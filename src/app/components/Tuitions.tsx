@@ -19,8 +19,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { DollarSign, Calendar, CreditCard, AlertCircle, CheckCircle, Search } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
+import { DollarSign, Calendar, CreditCard, AlertCircle, CheckCircle, Search, Mail } from "lucide-react";
 import { Progress } from "./ui/progress";
+import { showSuccessToast } from "../utils/toastNotification";
+import { PageHeader } from "./ui/page-header";
 
 interface TuitionRecord {
   id: number;
@@ -46,6 +56,9 @@ interface PaymentHistory {
 export function Tuitions() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("Spring 2026");
+  const [sortColumn, setSortColumn] = useState<string>("studentName");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [statusFilter, setStatusFilter] = useState<"All" | "Overdue" | "Pending" | "Paid">("Overdue");
 
   const tuitionRecords: TuitionRecord[] = [
     { id: 1, studentName: "Emma Watson", grade: "Grade 12", totalFee: 12000, paidAmount: 12000, dueAmount: 0, dueDate: "2026-01-15", status: "Paid", semester: "Spring 2026" },
@@ -66,8 +79,46 @@ export function Tuitions() {
   ];
 
   const filteredRecords = tuitionRecords.filter(record =>
-    record.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    record.grade.toLowerCase().includes(searchQuery.toLowerCase())
+    (record.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    record.grade.toLowerCase().includes(searchQuery.toLowerCase())) &&
+    (statusFilter === "All" || record.status === statusFilter)
+  );
+
+  const sortedRecords = [...filteredRecords].sort((a, b) => {
+    let aValue: any = a[sortColumn as keyof TuitionRecord];
+    let bValue: any = b[sortColumn as keyof TuitionRecord];
+
+    if (typeof aValue === "string") {
+      aValue = aValue.toLowerCase();
+      bValue = bValue.toLowerCase();
+    }
+
+    if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  const SortableHeader = ({ column, label }: { column: string; label: string }) => (
+    <TableHead 
+      className="cursor-pointer hover:bg-gray-100 select-none"
+      onClick={() => handleSort(column)}
+    >
+      <div className="flex items-center gap-2">
+        {label}
+        {sortColumn === column && (
+          <span className="text-xs">{sortDirection === "asc" ? "↑" : "↓"}</span>
+        )}
+      </div>
+    </TableHead>
   );
 
   const totalCollected = tuitionRecords.reduce((sum, record) => sum + record.paidAmount, 0);
@@ -88,68 +139,72 @@ export function Tuitions() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl mb-2">Tuition Management</h1>
-          <p className="text-gray-600">Track and manage student fee payments</p>
-        </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <DollarSign className="h-4 w-4 mr-2" />
-              Record Payment
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Record Payment</DialogTitle>
-              <DialogDescription>
-                Enter payment details for a student.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="student">Student</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select student" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {tuitionRecords.map((record) => (
-                      <SelectItem key={record.id} value={record.id.toString()}>
-                        {record.studentName} - {record.grade}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+      <PageHeader
+        title="Tuition Management"
+        subtitle="Track and manage student fee payments"
+        actions={
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                type="button"
+                data-slot="dialog-trigger"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3"
+              >
+                <DollarSign className="h-4 w-4 mr-2" />
+                Record Payment
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Record Payment</DialogTitle>
+                <DialogDescription>
+                  Enter payment details for a student.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="student">Student</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select student" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {tuitionRecords.map((record) => (
+                        <SelectItem key={record.id} value={record.id.toString()}>
+                          {record.studentName} - {record.grade}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="amount">Amount</Label>
+                  <Input id="amount" type="number" placeholder="0.00" />
+                </div>
+                <div>
+                  <Label htmlFor="method">Payment Method</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="cash">Cash</SelectItem>
+                      <SelectItem value="card">Credit Card</SelectItem>
+                      <SelectItem value="bank">Bank Transfer</SelectItem>
+                      <SelectItem value="check">Check</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="transaction">Transaction ID</Label>
+                  <Input id="transaction" placeholder="Enter transaction ID" />
+                </div>
+                <Button className="w-full">Submit Payment</Button>
               </div>
-              <div>
-                <Label htmlFor="amount">Amount</Label>
-                <Input id="amount" type="number" placeholder="0.00" />
-              </div>
-              <div>
-                <Label htmlFor="method">Payment Method</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cash">Cash</SelectItem>
-                    <SelectItem value="card">Credit Card</SelectItem>
-                    <SelectItem value="bank">Bank Transfer</SelectItem>
-                    <SelectItem value="check">Check</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="transaction">Transaction ID</Label>
-                <Input id="transaction" placeholder="Enter transaction ID" />
-              </div>
-              <Button className="w-full">Submit Payment</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
+            </DialogContent>
+          </Dialog>
+        }
+      />
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -221,45 +276,118 @@ export function Tuitions() {
         </CardContent>
       </Card>
 
-      {/* Tuition Records */}
+      {/* Tuition Records Table */}
       <Card>
-        <CardHeader>
-          <CardTitle>Student Tuition Status</CardTitle>
+        <CardHeader className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CardTitle>Student Tuition Status</CardTitle>
+            <div className="flex gap-2">
+              {(["All", "Overdue", "Pending", "Paid"] as const).map((status) => (
+                <Button
+                  key={status}
+                  variant={statusFilter === status ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setStatusFilter(status)}
+                  className="text-xs"
+                >
+                  {status}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <Button 
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const overdueCount = filteredRecords.filter(r => r.status === "Overdue" || r.status === "Pending").length;
+              showSuccessToast(`✓ Reminders sent`, `${overdueCount} reminder(s) sent to students with pending payments`);
+            }}
+          >
+            <Mail className="h-4 w-4 mr-2" />
+            Send Reminders
+          </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {filteredRecords.map((record) => (
-              <div key={record.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4>{record.studentName}</h4>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <SortableHeader column="studentName" label="Student Name" />
+                  <SortableHeader column="grade" label="Grade" />
+                  <SortableHeader column="totalFee" label="Total Fee" />
+                  <SortableHeader column="paidAmount" label="Paid" />
+                  <SortableHeader column="dueAmount" label="Due Amount" />
+                  <SortableHeader column="dueDate" label="Due Date" />
+                  <SortableHeader column="status" label="Status" />
+                  <TableHead>Progress</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedRecords.map((record) => (
+                  <TableRow key={record.id}>
+                    <TableCell className="font-medium">{record.studentName}</TableCell>
+                    <TableCell>{record.grade}</TableCell>
+                    <TableCell>${record.totalFee.toLocaleString()}</TableCell>
+                    <TableCell className="text-green-600 font-semibold">${record.paidAmount.toLocaleString()}</TableCell>
+                    <TableCell className="text-red-600 font-semibold">${record.dueAmount.toLocaleString()}</TableCell>
+                    <TableCell>{record.dueDate}</TableCell>
+                    <TableCell>
                       <Badge className={getStatusColor(record.status)}>
                         {getStatusIcon(record.status)}
                         <span className="ml-1">{record.status}</span>
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="w-20">
+                        <Progress value={(record.paidAmount / record.totalFee) * 100} className="h-2" />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Upcoming Dues */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Upcoming Dues</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {tuitionRecords
+              .filter(record => record.status === "Pending" || record.status === "Overdue")
+              .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+              .map((record) => (
+                <div key={record.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4" 
+                  style={{ borderColor: record.status === "Overdue" ? "#ef4444" : "#f59e0b" }}>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h4 className="font-semibold">{record.studentName}</h4>
+                      <Badge variant={record.status === "Overdue" ? "destructive" : "secondary"}>
+                        {record.status === "Overdue" ? "🔴 Overdue" : "🟡 Due Soon"}
+                      </Badge>
                     </div>
-                    <p className="text-sm text-gray-600">{record.grade} • Due: {record.dueDate}</p>
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-600">Due Amount</p>
+                        <p className="font-semibold text-red-600">${record.dueAmount.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Due Date</p>
+                        <p className="font-semibold">{record.dueDate}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Grade</p>
+                        <p className="font-semibold">{record.grade}</p>
+                      </div>
+                    </div>
                   </div>
-                  <Button variant="outline" size="sm">View Details</Button>
+                  <Button variant="outline" size="sm">Send Reminder</Button>
                 </div>
-                <div className="grid grid-cols-3 gap-4 mb-2">
-                  <div>
-                    <p className="text-xs text-gray-600 mb-1">Total Fee</p>
-                    <p className="text-sm">${record.totalFee.toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600 mb-1">Paid</p>
-                    <p className="text-sm text-green-600">${record.paidAmount.toLocaleString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-600 mb-1">Due</p>
-                    <p className="text-sm text-red-600">${record.dueAmount.toLocaleString()}</p>
-                  </div>
-                </div>
-                <Progress value={(record.paidAmount / record.totalFee) * 100} className="h-2" />
-              </div>
-            ))}
+              ))}
           </div>
         </CardContent>
       </Card>

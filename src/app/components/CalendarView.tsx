@@ -20,8 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, Clock, MapPin, Users, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
+import { PageHeader } from "./ui/page-header";
 
 interface CalendarEvent {
   id: number;
@@ -36,7 +37,7 @@ interface CalendarEvent {
 }
 
 interface CalendarViewProps {
-  userRole: "admin" | "teacher" | "parent";
+  userRole: "admin" | "teacher" | "parent" | "student";
 }
 
 export function CalendarView({ userRole }: CalendarViewProps) {
@@ -98,7 +99,7 @@ export function CalendarView({ userRole }: CalendarViewProps) {
     },
   ]);
 
-  const [selectedMonth, setSelectedMonth] = useState("January 2026");
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({
     title: "",
@@ -109,6 +110,27 @@ export function CalendarView({ userRole }: CalendarViewProps) {
     type: "Event" as "Exam" | "Meeting" | "Holiday" | "Event" | "Sports",
     audience: "All",
   });
+
+  const getDaysInMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const getEventsForDate = (year: number, month: number, day: number) => {
+    const dateStr = new Date(year, month, day).toISOString().split('T')[0];
+    return events.filter(event => event.date === dateStr);
+  };
+
+  const previousMonth = () => {
+    setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1));
+  };
+
+  const nextMonth = () => {
+    setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1));
+  };
 
   const handleCreateEvent = () => {
     const event: CalendarEvent = {
@@ -165,16 +187,12 @@ export function CalendarView({ userRole }: CalendarViewProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl mb-2">School Calendar</h1>
-          <p className="text-gray-600">
-            {canCreateEvent
+      <PageHeader
+        title="School Calendar"
+        subtitle={canCreateEvent
               ? "Manage school events and important dates"
               : "View upcoming events and important dates"}
-          </p>
-        </div>
-        {canCreateEvent && (
+        actions={canCreateEvent && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -287,9 +305,78 @@ export function CalendarView({ userRole }: CalendarViewProps) {
             </DialogContent>
           </Dialog>
         )}
-      </div>
+      />
 
-      {/* Upcoming Events Summary */}
+      {/* Dynamic Calendar */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <CalendarIcon className="h-5 w-5" />
+            {selectedMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+          </CardTitle>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={previousMonth}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={nextMonth}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Calendar Grid */}
+            <div>
+              <div className="grid grid-cols-7 gap-1 mb-2">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                  <div key={day} className="text-center font-semibold text-sm text-gray-600 py-2">
+                    {day}
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1">
+                {Array.from({ length: getFirstDayOfMonth(selectedMonth) }).map((_, i) => (
+                  <div key={`empty-${i}`} className="aspect-square" />
+                ))}
+                {Array.from({ length: getDaysInMonth(selectedMonth) }).map((_, i) => {
+                  const day = i + 1;
+                  const dayEvents = getEventsForDate(selectedMonth.getFullYear(), selectedMonth.getMonth(), day);
+                  const isToday = new Date().toDateString() === new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), day).toDateString();
+                  
+                  return (
+                    <div
+                      key={day}
+                      className={`aspect-square p-1 rounded-lg border text-sm relative group cursor-pointer transition-colors ${
+                        isToday ? 'bg-blue-100 border-blue-300' : dayEvents.length > 0 ? 'bg-orange-50 border-orange-200 hover:bg-orange-100' : 'border-gray-200 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className={`font-semibold mb-1 ${isToday ? 'text-blue-600' : 'text-gray-700'}`}>
+                        {day}
+                      </div>
+                      <div className="space-y-0.5">
+                        {dayEvents.slice(0, 2).map(event => (
+                          <div
+                            key={event.id}
+                            className={`text-xs px-1 py-0.5 rounded truncate ${getTypeColor(event.type).replace('text-', 'text-').replace('bg-', 'bg-')}`}
+                            title={event.title}
+                          >
+                            {event.title}
+                          </div>
+                        ))}
+                        {dayEvents.length > 2 && (
+                          <div className="text-xs text-gray-500 px-1">
+                            +{dayEvents.length - 2} more
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle>Upcoming Events</CardTitle>

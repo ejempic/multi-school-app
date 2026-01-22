@@ -6,6 +6,7 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Badge } from "./ui/badge";
 import { Checkbox } from "./ui/checkbox";
+import { PageHeader } from "./ui/page-header";
 import {
   Dialog,
   DialogContent,
@@ -36,7 +37,7 @@ interface Announcement {
 }
 
 interface AnnouncementsProps {
-  userRole: "admin" | "teacher" | "parent";
+  userRole: "admin" | "teacher" | "parent" | "student";
 }
 
 export function Announcements({ userRole }: AnnouncementsProps) {
@@ -133,16 +134,12 @@ export function Announcements({ userRole }: AnnouncementsProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl mb-2">Announcements</h1>
-          <p className="text-gray-600">
-            {canCreateAnnouncement
-              ? "Create and manage school announcements"
-              : "View important announcements from school"}
-          </p>
-        </div>
-        {canCreateAnnouncement && (
+      <PageHeader
+        title="Announcements"
+        subtitle={canCreateAnnouncement
+          ? "Create and manage school announcements"
+          : "View important announcements from school"}
+        actions={canCreateAnnouncement && (
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -269,7 +266,7 @@ export function Announcements({ userRole }: AnnouncementsProps) {
             </DialogContent>
           </Dialog>
         )}
-      </div>
+      />
 
       {/* Announcements List */}
       <div className="space-y-4">

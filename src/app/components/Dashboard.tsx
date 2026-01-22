@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { BookOpen, Users, Calendar, GraduationCap } from "lucide-react";
+import { PageHeader } from "./ui/page-header";
 
 export function Dashboard() {
   const stats = [
@@ -48,10 +49,10 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl mb-2">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's what's happening today.</p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        subtitle="Welcome back! Here's what's happening today."
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

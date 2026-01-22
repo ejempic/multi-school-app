@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { BookOpen, Users, ClipboardCheck, Calendar } from "lucide-react";
+import { Progress } from "./ui/progress";
+import { Calendar, BookOpen, GraduationCap, DollarSign, TrendingUp, Users, ClipboardCheck } from "lucide-react";
+import { PageHeader } from "./ui/page-header";
 
 interface TeacherDashboardProps {
   userData: any;
@@ -58,10 +60,10 @@ export function TeacherDashboard({ userData }: TeacherDashboardProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl mb-2">Teacher Portal</h1>
-        <p className="text-gray-600">Welcome, {userData.name}! Here's your overview.</p>
-      </div>
+      <PageHeader
+        title="Teacher Portal"
+        subtitle={`Welcome, ${userData.name}! Here's your overview.`}
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

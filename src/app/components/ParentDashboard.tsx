@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
 import { Calendar, BookOpen, GraduationCap, DollarSign, TrendingUp } from "lucide-react";
+import { PageHeader } from "./ui/page-header";
 
 interface ParentDashboardProps {
   userData: any;
@@ -45,10 +46,10 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl mb-2">Parent Portal</h1>
-        <p className="text-gray-600">Welcome, {userData.name}! Track your children's progress.</p>
-      </div>
+      <PageHeader
+        title="Parent Portal"
+        subtitle={`Welcome, ${userData.name}! Track your children's progress.`}
+      />
 
       {childrenData.map((child, index) => (
         <div key={index} className="space-y-4">
