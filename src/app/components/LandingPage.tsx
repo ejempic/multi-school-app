@@ -53,7 +53,7 @@ export function LandingPage() {
                 <Button variant="outline" size="sm">Login to School Portal</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                {tenants.map((tenant) => (
+                {tenants.filter((tenant) => tenant.id !== "admin").map((tenant) => (
                   <DropdownMenuItem 
                     key={tenant.id}
                     onClick={() => window.location.href = `http://${tenant.subdomain}.localhost:5173`}
