@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { Login } from "./components/Login";
 import { Dashboard } from "./components/Dashboard";
 import { LandingPage } from "./components/LandingPage";
+import { TenantLandingPage } from "./components/TenantLandingPage";
 import { useTenant } from "./contexts/TenantContext";
 import { Students } from "./components/Students";
 import { Classes } from "./components/Classes";
@@ -236,9 +237,9 @@ export default function App() {
       {/* Public routes */}
       <Route path="/" element={
         !isLoggedIn ? (
-          <Login 
-            onLogin={handleLogin} 
-            onNavigateToScanner={() => navigate("/student-scanner")}
+          <TenantLandingPage
+            tenant={currentTenant}
+            onLogin={() => navigate("/login")}
           />
         ) : isCoffeeTableMode ? (
           <div 
@@ -248,22 +249,7 @@ export default function App() {
               color: currentTenant?.theme?.primary || '#1e3a8a'
              }}
           >
-            <style>{`
-              :root {
-                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};
-                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};
-                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};
-                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};
-              }
-              h1, h2, h3, h4, h5, h6 {
-                color: var(--theme-primary) !important;
-              }
-              // Sidebar overrides
-              .sidebar-nav {
-                background-color: var(--theme-background) !important;
-                border-right-color: var(--theme-secondary) !important;
-              }
-            `}</style>
+            <style>{`\n              :root {\n                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};\n                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};\n                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};\n                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};\n              }\n              h1, h2, h3, h4, h5, h6 {\n                color: var(--theme-primary) !important;\n              }\n              // Sidebar overrides\n              .sidebar-nav {\n                background-color: var(--theme-background) !important;\n                border-right-color: var(--theme-secondary) !important;\n              }\n            `}</style>
             <Toaster />
             {renderView()}
           </div>
@@ -275,17 +261,7 @@ export default function App() {
               color: currentTenant?.theme?.primary || '#1e3a8a'
             }}
           >
-            <style>{`
-              :root {
-                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};
-                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};
-                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};
-                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};
-              }
-              h1, h2, h3, h4, h5, h6 {
-                color: var(--theme-primary) !important;
-              }
-            `}</style>
+            <style>{`\n              :root {\n                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};\n                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};\n                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};\n                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};\n              }\n              h1, h2, h3, h4, h5, h6 {\n                color: var(--theme-primary) !important;\n              }\n            `}</style>
             <Toaster />
             <header className="bg-white border-b px-6 py-4 flex items-center justify-between sticky top-0 z-40">
               <Button 
@@ -315,54 +291,7 @@ export default function App() {
               className="min-h-screen transition-colors duration-300"
               style={{ backgroundColor: currentTenant?.theme?.background || '#f9fafb', color: theme.textColor }}
             >
-             <style>{`
-              :root {
-                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};
-                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};
-                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};
-                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};
-                --theme-text: ${theme.textColor};
-                --theme-border: ${theme.borderColor};
-                --theme-card-bg: ${theme.cardBg};
-                --theme-nav-hover: ${theme.isDark ? 'rgba(255,255,255,0.08)' : 'rgba(30,58,138,0.08)'};
-                --theme-nav-active: ${currentTenant?.theme?.secondary || '#2563eb'};
-                --theme-nav-text: ${theme.textColor};
-                --theme-nav-muted: ${theme.subTextColor};
-              }
-              body {
-                color: var(--theme-text);
-              }
-              h1, h2, h3, h4, h5, h6 {
-                color: var(--theme-text) !important;
-              }
-              .text-muted-foreground {
-                color: var(--theme-nav-muted) !important;
-              }
-              .border-gray-200, .border-b, .border-r {
-                border-color: var(--theme-border) !important;
-              }
-              .bg-white {
-                background-color: var(--theme-card-bg) !important;
-              }
-              .sidebar-wrapper {
-                 background-color: var(--theme-background) !important;
-                 border-right: 1px solid var(--theme-border) !important;
-              }
-              .sidebar-wrapper button {
-                color: var(--theme-nav-text) !important;
-                background: none;
-                transition: background 0.15s, color 0.15s;
-              }
-              .sidebar-wrapper button:hover {
-                background: var(--theme-nav-hover) !important;
-                color: var(--theme-nav-text) !important;
-              }
-              .sidebar-wrapper button[aria-current="page"],
-              .sidebar-wrapper button.active {
-                background: var(--theme-nav-active) !important;
-                color: #fff !important;
-              }
-            `}</style>
+             <style>{`\n              :root {\n                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};\n                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};\n                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};\n                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};\n                --theme-text: ${theme.textColor};\n                --theme-border: ${theme.borderColor};\n                --theme-card-bg: ${theme.cardBg};\n                --theme-nav-hover: ${theme.isDark ? 'rgba(255,255,255,0.08)' : 'rgba(30,58,138,0.08)'};\n                --theme-nav-active: ${currentTenant?.theme?.secondary || '#2563eb'};\n                --theme-nav-text: ${theme.textColor};\n                --theme-nav-muted: ${theme.subTextColor};\n              }\n              body {\n                color: var(--theme-text);\n              }\n              h1, h2, h3, h4, h5, h6 {\n                color: var(--theme-text) !important;\n              }\n              .text-muted-foreground {\n                color: var(--theme-nav-muted) !important;\n              }\n              .border-gray-200, .border-b, .border-r {\n                border-color: var(--theme-border) !important;\n              }\n              .bg-white {\n                background-color: var(--theme-card-bg) !important;\n              }\n              .sidebar-wrapper {\n                 background-color: var(--theme-background) !important;\n                 border-right: 1px solid var(--theme-border) !important;\n              }\n              .sidebar-wrapper button {\n                color: var(--theme-nav-text) !important;\n                background: none;\n                transition: background 0.15s, color 0.15s;\n              }\n              .sidebar-wrapper button:hover {\n                background: var(--theme-nav-hover) !important;\n                color: var(--theme-nav-text) !important;\n              }\n              .sidebar-wrapper button[aria-current=\"page\"],\n              .sidebar-wrapper button.active {\n                background: var(--theme-nav-active) !important;\n                color: #fff !important;\n              }\n            `}</style>
               <Toaster />
               {/* Header */}
               <header 
@@ -535,6 +464,17 @@ export default function App() {
               )}
             </div>
           </>
+        )
+      } />
+
+      <Route path="/login" element={
+        !isLoggedIn ? (
+          <Login 
+            onLogin={handleLogin} 
+            onNavigateToScanner={() => navigate("/student-scanner")}
+          />
+        ) : (
+          <Navigate to="/" replace />
         )
       } />
 
