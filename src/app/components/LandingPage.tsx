@@ -35,18 +35,73 @@ export function LandingPage() {
   const features = [
     {
       icon: Users,
-      title: "Student and Staff Profiles",
-      description: "Keep enrollment, class lists, and key information in one secure system.",
+      title: "Student & Staff Profiles",
+      description: "Centralize all student and staff data in one secure location.",
+      longDescription: "Manage enrollments, class assignments, contact information, and medical records with role-based access controls. Never lose track of important student details again.",
+      image: "/feature-images/student_staff.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "Class & Subject Management",
+      description: "Easily organize classes, subjects, and schedules.",
+      longDescription: "Assign teachers, manage class lists, and set up subject schedules with just a few clicks. Simplify classroom logistics and ensure every student is in the right place.",
+      image: "/feature-images/class_subject.jpg",
     },
     {
       icon: BookOpen,
       title: "Academic Tracking",
-      description: "Manage grades, attendance, and student progress with clear records.",
+      description: "Monitor grades, attendance, and student progress in real-time.",
+      longDescription: "Generate progress reports automatically, identify at-risk students early, and provide data-driven insights for intervention. Keep parents informed with transparent grading systems.",
+      image: "/feature-images/academic.jpg",
     },
     {
       icon: GraduationCap,
       title: "Family Communication",
-      description: "Share school updates with parents, students, and teachers quickly.",
+      description: "Bridge the gap between school and home with instant messaging and announcements.",
+      longDescription: "Send personalized updates to parents, share important dates, emergency alerts, and celebrate student achievements. Keep everyone connected and informed.",
+      image: "/feature-images/family.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "Attendance & ID Scanning",
+      description: "Track student attendance with digital logs and ID scanning.",
+      longDescription: "Automate attendance tracking for students only. Use ID scanners for quick student check-in and check-out, reducing manual errors and saving time.",
+      image: "/feature-images/attendance.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "Grading & Report Cards",
+      description: "Automate grading and generate report cards instantly.",
+      longDescription: "Teachers can enter grades online, and the system calculates averages, ranks, and generates printable report cards for each term.",
+      image: "/feature-images/grades.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "Tuition & Billing",
+      description: "Manage tuition payments and billing records with ease.",
+      longDescription: "Track student payments, generate invoices, and send reminders for outstanding balances. Simplify financial management for your school and parents.",
+      image: "/feature-images/tuition.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "Library & Clinic Management",
+      description: "Digitize library checkouts and clinic visits.",
+      longDescription: "Manage book inventories, track student loans, and log clinic visits for health monitoring. Keep all resources organized and accessible.",
+      image: "/feature-images/library.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "Behavior & Merit Tracking",
+      description: "Track merits, demerits, and student behavior trends.",
+      longDescription: "Log positive and negative behaviors, reward students, and generate reports for parent-teacher conferences.",
+      image: "/feature-images/behaviour.jpg",
+    },
+    {
+      icon: BookOpen,
+      title: "PACE Learning System",
+      description: "Support individualized learning with PACE modules.",
+      longDescription: "Assign, track, and assess PACE modules for students, supporting mastery-based education and personalized learning paths.",
+      image: "/feature-images/pace.jpg",
     },
   ];
 
@@ -236,23 +291,36 @@ export function LandingPage() {
 
       <section id="features" className="bg-slate-50 px-4 py-14">
         <div className="container mx-auto">
-          <div className="mb-10 text-center">
+          <div className="mb-12 text-center">
             <h2 className="mb-3 text-3xl font-bold">Built for School Teams</h2>
             <p className="mx-auto max-w-2xl text-slate-600">
               Focus on what matters most: student growth, teacher support, and smooth daily operations.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
-              <Card key={index} className="border-none shadow-sm">
+              <Card key={index} className="border-none shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="relative h-48 w-full overflow-hidden bg-slate-200">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                </div>
                 <CardHeader>
                   <feature.icon className="h-10 w-10 text-blue-600 mb-2" />
-                  <CardTitle>{feature.title}</CardTitle>
+                  <CardTitle className="text-lg">{feature.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">
+                <CardContent className="space-y-3">
+                  <CardDescription className="text-base font-medium text-slate-700">
                     {feature.description}
                   </CardDescription>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    {feature.longDescription}
+                  </p>
                 </CardContent>
               </Card>
             ))}
