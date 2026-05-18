@@ -1,7 +1,11 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { GraduationCap, Users, BookOpen, Mail, PhoneCall, Check, X } from "lucide-react";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
 import { tenants } from "../data/tenants";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +15,13 @@ import {
 
 export function LandingPage() {
   const schoolTenants = tenants.filter((tenant) => tenant.id !== "admin");
+  const [formData, setFormData] = useState({
+    schoolName: "",
+    schoolAddress: "",
+    contactPerson: "",
+    contactNumber: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSchoolLogin = (subdomain: string) => {
     const port = window.location.port ? `:${window.location.port}` : "";
@@ -117,6 +128,34 @@ export function LandingPage() {
     return colorMap[color] || colorMap.blue;
   };
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // TODO: Implement form submission logic (e.g., send to backend or email service)
+    console.log("Form submitted:", formData);
+    // Simulate submission delay
+    setTimeout(() => {
+      alert("Thank you for your interest! We'll be in touch soon.");
+      setFormData({
+        schoolName: "",
+        schoolAddress: "",
+        contactPerson: "",
+        contactNumber: "",
+      });
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -128,7 +167,6 @@ export function LandingPage() {
           <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
             <a href="#features" className="hover:text-blue-600 transition-colors">Features</a>
             <a href="#pricing" className="hover:text-blue-600 transition-colors">Pricing</a>
-            <a href="#contact" className="hover:text-blue-600 transition-colors">Contact</a>
           </nav>
           <div className="flex items-center gap-2">
             <DropdownMenu>
@@ -183,9 +221,6 @@ export function LandingPage() {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button asChild variant="outline" size="lg" className="h-12 px-8">
-              <a href="#contact">Contact</a>
-            </Button>
           </div>
           {schoolTenants.length === 0 && (
             <p className="text-sm text-amber-700">No school domains are configured yet. Please contact support.</p>
@@ -319,38 +354,80 @@ export function LandingPage() {
           </div>
 
           {/* Call to Action */}
-          <div className="mt-16 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12 text-center text-white">
-            <h3 className="mb-3 text-2xl font-bold">Ready to get started?</h3>
-            <p className="mb-6 text-blue-100">
-              Join schools using SchoolApp to streamline their operations.
-            </p>
-            <Button size="lg" variant="secondary">
-              Get in Touch
-            </Button>
-          </div>
-        </div>
-      </section>
+          <div className="mt-16 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12">
+            <div className="max-w-2xl mx-auto">
+              <h3 className="mb-3 text-2xl font-bold text-white text-center">Ready to Get in Touch?</h3>
+              <p className="mb-8 text-blue-100 text-center">
+                Contact us to discuss your school's needs and explore which plan is right for you.
+              </p>
+              
+              <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-lg p-6">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="schoolName" className="text-slate-900">School Name *</Label>
+                    <Input
+                      id="schoolName"
+                      name="schoolName"
+                      placeholder="Enter your school name"
+                      value={formData.schoolName}
+                      onChange={handleInputChange}
+                      required
+                      className="border-slate-300"
+                    />
+                  </div>
 
-      <section id="contact" className="bg-white px-4 py-14">
-        <div className="container mx-auto max-w-3xl">
-          <Card className="border-slate-200 shadow-sm">
-            <CardHeader>
-              <CardTitle>Contact</CardTitle>
-              <CardDescription>
-                Need access for your school domain or help with login? Reach out to our team.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-slate-700">
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-blue-600" />
-                <span>support@schoolapp.local</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <PhoneCall className="h-4 w-4 text-blue-600" />
-                <span>+63 900 000 0000</span>
-              </div>
-            </CardContent>
-          </Card>
+                  <div className="space-y-2">
+                    <Label htmlFor="contactPerson" className="text-slate-900">Contact Person *</Label>
+                    <Input
+                      id="contactPerson"
+                      name="contactPerson"
+                      placeholder="Enter your name"
+                      value={formData.contactPerson}
+                      onChange={handleInputChange}
+                      required
+                      className="border-slate-300"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="schoolAddress" className="text-slate-900">School Address *</Label>
+                  <Textarea
+                    id="schoolAddress"
+                    name="schoolAddress"
+                    placeholder="Enter your school's complete address"
+                    value={formData.schoolAddress}
+                    onChange={handleInputChange}
+                    required
+                    rows={3}
+                    className="border-slate-300"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="contactNumber" className="text-slate-900">Contact Number *</Label>
+                  <Input
+                    id="contactNumber"
+                    name="contactNumber"
+                    type="tel"
+                    placeholder="Enter your contact number"
+                    value={formData.contactNumber}
+                    onChange={handleInputChange}
+                    required
+                    className="border-slate-300"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </Button>
+              </form>
+            </div>
+          </div>
         </div>
       </section>
 
