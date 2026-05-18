@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
-import { GraduationCap, Users, BookOpen, Mail, PhoneCall } from "lucide-react";
+import { GraduationCap, Users, BookOpen, Mail, PhoneCall, Check, X } from "lucide-react";
 import { tenants } from "../data/tenants";
 import {
   DropdownMenu,
@@ -36,6 +36,87 @@ export function LandingPage() {
     },
   ];
 
+  // Define subscription plans with their features
+  const subscriptionPlans = [
+    {
+      name: "Basic",
+      description: "Perfect for small schools getting started",
+      color: "blue",
+      features: [
+        "Student Database (SIS)",
+        "Class Management",
+        "Attendance Tracking",
+        "Teacher Portal Login",
+        "Parent Portal Login",
+      ],
+    },
+    {
+      name: "Pro",
+      description: "Great for growing schools",
+      color: "purple",
+      popular: true,
+      features: [
+        "Student Database (SIS)",
+        "Class Management",
+        "Attendance Tracking",
+        "Teacher Portal Login",
+        "Parent Portal Login",
+        "Student Portal Login",
+        "Grading & Report Cards",
+        "Communication Suite",
+      ],
+    },
+    {
+      name: "Enterprise",
+      description: "Complete solution for established schools",
+      color: "amber",
+      features: [
+        "Student Database (SIS)",
+        "Class Management",
+        "Attendance Tracking",
+        "Teacher Portal Login",
+        "Parent Portal Login",
+        "Student Portal Login",
+        "Grading & Report Cards",
+        "Tuition & Billing",
+        "Communication Suite",
+        "Sick Leaves Management",
+        "PACE Learning System",
+        "Behavior Management (Merits/Demerits)",
+        "ID Scanner",
+        "Clinic Management",
+        "Library Management",
+        "Advanced Authentication",
+      ],
+    },
+  ];
+
+  // Get all unique features across plans
+  const allFeatures = Array.from(
+    new Set(subscriptionPlans.flatMap((plan) => plan.features))
+  );
+
+  const getColorClasses = (color: string) => {
+    const colorMap: Record<string, { bg: string; text: string; border: string }> = {
+      blue: {
+        bg: "bg-blue-50",
+        text: "text-blue-700",
+        border: "border-blue-200",
+      },
+      purple: {
+        bg: "bg-purple-50",
+        text: "text-purple-700",
+        border: "border-purple-200",
+      },
+      amber: {
+        bg: "bg-amber-50",
+        text: "text-amber-700",
+        border: "border-amber-200",
+      },
+    };
+    return colorMap[color] || colorMap.blue;
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -46,6 +127,7 @@ export function LandingPage() {
           </div>
           <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
             <a href="#features" className="hover:text-blue-600 transition-colors">Features</a>
+            <a href="#pricing" className="hover:text-blue-600 transition-colors">Pricing</a>
             <a href="#contact" className="hover:text-blue-600 transition-colors">Contact</a>
           </nav>
           <div className="flex items-center gap-2">
@@ -133,6 +215,118 @@ export function LandingPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="bg-white px-4 py-16">
+        <div className="container mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="mb-3 text-3xl font-bold">Subscription Plans</h2>
+            <p className="mx-auto max-w-2xl text-slate-600">
+              Choose the perfect plan for your school. All plans include core features with additional capabilities as you scale.
+            </p>
+          </div>
+
+          {/* Plans Overview Cards */}
+          <div className="mb-12 grid gap-6 lg:grid-cols-3">
+            {subscriptionPlans.map((plan, index) => {
+              const colors = getColorClasses(plan.color);
+              return (
+                <Card
+                  key={index}
+                  className={`relative overflow-hidden border-2 transition-all ${
+                    plan.popular
+                      ? `${colors.border} ring-2 ring-offset-2 ring-${plan.color}-300`
+                      : "border-slate-200"
+                  }`}
+                >
+                  {plan.popular && (
+                    <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 py-1 text-xs font-semibold rounded-bl-lg">
+                      Most Popular
+                    </div>
+                  )}
+                  <CardHeader className={plan.popular ? colors.bg : ""}>
+                    <CardTitle className="text-xl">{plan.name}</CardTitle>
+                    <CardDescription>{plan.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <div className="mb-6">
+                      <div className={`text-sm font-medium ${colors.text}`}>
+                        {plan.features.length} features included
+                      </div>
+                    </div>
+                    <Button
+                      className="w-full"
+                      variant={plan.popular ? "default" : "outline"}
+                    >
+                      Choose Plan
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Detailed Features Comparison */}
+          <div className="mt-16">
+            <h3 className="mb-8 text-center text-2xl font-bold">Feature Comparison</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b-2 border-slate-300">
+                    <th className="text-left py-4 px-4 font-bold text-slate-900 w-1/4">
+                      Feature
+                    </th>
+                    {subscriptionPlans.map((plan) => (
+                      <th
+                        key={plan.name}
+                        className="text-center py-4 px-4 font-bold text-slate-900"
+                      >
+                        {plan.name}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {allFeatures.map((feature, idx) => (
+                    <tr
+                      key={idx}
+                      className={`border-b border-slate-200 ${
+                        idx % 2 === 0 ? "bg-slate-50" : "bg-white"
+                      }`}
+                    >
+                      <td className="py-4 px-4 text-sm font-medium text-slate-900">
+                        {feature}
+                      </td>
+                      {subscriptionPlans.map((plan) => (
+                        <td
+                          key={`${plan.name}-${feature}`}
+                          className="text-center py-4 px-4"
+                        >
+                          {plan.features.includes(feature) ? (
+                            <Check className="h-5 w-5 text-green-600 mx-auto" />
+                          ) : (
+                            <X className="h-5 w-5 text-slate-300 mx-auto" />
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="mt-16 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12 text-center text-white">
+            <h3 className="mb-3 text-2xl font-bold">Ready to get started?</h3>
+            <p className="mb-6 text-blue-100">
+              Join schools using SchoolApp to streamline their operations.
+            </p>
+            <Button size="lg" variant="secondary">
+              Get in Touch
+            </Button>
           </div>
         </div>
       </section>
