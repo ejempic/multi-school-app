@@ -20,6 +20,9 @@ export function LandingPage() {
     schoolAddress: "",
     contactPerson: "",
     contactNumber: "",
+    numberOfStudents: "",
+    hasExistingSystem: "",
+    referrer: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -129,7 +132,7 @@ export function LandingPage() {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -151,6 +154,9 @@ export function LandingPage() {
         schoolAddress: "",
         contactPerson: "",
         contactNumber: "",
+        numberOfStudents: "",
+        hasExistingSystem: "",
+        referrer: "",
       });
       setIsSubmitting(false);
     }, 1000);
@@ -414,6 +420,51 @@ export function LandingPage() {
                     value={formData.contactNumber}
                     onChange={handleInputChange}
                     required
+                    className="border-slate-300"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="numberOfStudents" className="text-slate-900">Number of Students *</Label>
+                  <Input
+                    id="numberOfStudents"
+                    name="numberOfStudents"
+                    type="number"
+                    placeholder="Enter number of students"
+                    value={formData.numberOfStudents}
+                    onChange={handleInputChange}
+                    required
+                    className="border-slate-300"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="hasExistingSystem" className="text-slate-900">Do you have an existing system? *</Label>
+                  <select
+                    id="hasExistingSystem"
+                    name="hasExistingSystem"
+                    value={formData.hasExistingSystem}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md text-slate-900 bg-white"
+                  >
+                    <option value="">Select an option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                  <p className="text-xs text-slate-600 mt-1">
+                    We can easily migrate from any system if you authenticate us to view its reports.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="referrer" className="text-slate-900">Referrer / Discount Code</Label>
+                  <Input
+                    id="referrer"
+                    name="referrer"
+                    placeholder="Enter referral or discount code (optional)"
+                    value={formData.referrer}
+                    onChange={handleInputChange}
                     className="border-slate-300"
                   />
                 </div>
