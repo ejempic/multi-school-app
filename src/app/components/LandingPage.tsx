@@ -27,8 +27,13 @@ export function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSchoolLogin = (subdomain: string) => {
-    const port = window.location.port ? `:${window.location.port}` : "";
-    const targetUrl = `${window.location.protocol}//${subdomain}.localhost${port}`;
+    const { protocol, hostname, port } = window.location;
+    const isLocalhost = hostname === "localhost";
+    const rootDomain = isLocalhost
+      ? "localhost"
+      : hostname.split(".").slice(-2).join(".");
+    const targetHost = `${subdomain}.${rootDomain}`;
+    const targetUrl = `${protocol}//${targetHost}${port ? `:${port}` : ""}`;
     window.location.href = targetUrl;
   };
 
