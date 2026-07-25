@@ -111,9 +111,14 @@ function QrMatrix({ value }: QrMatrixProps) {
 const formatDateLabel = (value: string) => value || "No expiry set";
 const vehicleTypes = ["Walk-in", "Car / Van", "Motorcycle", "Tricycle", "School Service", "Other"];
 
-export function GatePasses() {
+interface GatePassesProps {
+  userRole?: string | null;
+}
+
+export function GatePasses({ userRole }: GatePassesProps) {
   const { passes, activePasses, selectedPass, setSelectedPassId, createGatePass, recordGateMovement } = useGatePasses();
   const { currentTenant } = useTenant();
+  const isParentAccess = userRole === "parent";
   const tenantStudents = useMemo(
     () => (currentTenant ? studentsByTenant[currentTenant.id] ?? [] : []).filter((student) => student.status === "Active"),
     [currentTenant]
@@ -235,48 +240,55 @@ export function GatePasses() {
 
       <PageHeader
         title="Gate Passes"
-        subtitle="Generate parent gate passes, print a QR-style slip, and keep an in/out audit trail."
+        subtitle={
+          isParentAccess
+            ? "View your issued gate pass, print it, and review its in/out audit trail."
+            : "Generate parent gate passes, print a QR-style slip, and keep an in/out audit trail."
+        }
       />
 
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-sm text-gray-600">Issued passes</p>
-            <div className="mt-2 flex items-center gap-3">
-              <Users className="h-5 w-5 text-blue-600" />
-              <p className="text-2xl">{passes.length}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-sm text-gray-600">Active passes</p>
-            <div className="mt-2 flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-emerald-600" />
-              <p className="text-2xl">{activePasses.length}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-sm text-gray-600">In / out logs</p>
-            <div className="mt-2 flex items-center gap-3">
-              <ArrowRightLeft className="h-5 w-5 text-violet-600" />
-              <p className="text-2xl">{passes.reduce((count, pass) => count + pass.logs.length, 0)}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <p className="text-sm text-gray-600">Print-ready</p>
-            <div className="mt-2 flex items-center gap-3">
-              <Printer className="h-5 w-5 text-amber-600" />
-              <p className="text-2xl">Yes</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {!isParentAccess && (
+        <div className="grid gap-4 md:grid-cols-4">
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-sm text-gray-600">Issued passes</p>
+              <div className="mt-2 flex items-center gap-3">
+                <Users className="h-5 w-5 text-blue-600" />
+                <p className="text-2xl">{passes.length}</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-sm text-gray-600">Active passes</p>
+              <div className="mt-2 flex items-center gap-3">
+                <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                <p className="text-2xl">{activePasses.length}</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-sm text-gray-600">In / out logs</p>
+              <div className="mt-2 flex items-center gap-3">
+                <ArrowRightLeft className="h-5 w-5 text-violet-600" />
+                <p className="text-2xl">{passes.reduce((count, pass) => count + pass.logs.length, 0)}</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-5">
+              <p className="text-sm text-gray-600">Print-ready</p>
+              <div className="mt-2 flex items-center gap-3">
+                <Printer className="h-5 w-5 text-amber-600" />
+                <p className="text-2xl">Yes</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
+      {!isParentAccess && (
       <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <Card className="no-print">
           <CardHeader>
@@ -425,6 +437,7 @@ export function GatePasses() {
           </CardContent>
         </Card>
       </div>
+      )}
 
       {passToDisplay && (
         <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
@@ -511,6 +524,7 @@ export function GatePasses() {
           </Card>
 
           <div className="space-y-6">
+            {!isParentAccess && (
             <Card className="no-print">
               <CardHeader>
                 <CardTitle>Gate actions</CardTitle>
@@ -548,14 +562,15 @@ export function GatePasses() {
                 </Button>
               </CardContent>
             </Card>
+            )}
 
             <Card>
               <CardHeader>
                 <CardTitle>Audit log</CardTitle>
-                <CardDescription>Latest movements for {selectedPass.studentName}.</CardDescription>
+                <CardDescription>Latest movements for {passToDisplay.studentName}.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {selectedPass.logs.map((log) => (
+                {passToDisplay.logs.map((log) => (
                   <div key={log.id} className="flex items-start gap-3 rounded-xl bg-slate-50 p-4">
                     <div className={`mt-0.5 rounded-full p-2 ${log.direction === "IN" ? "bg-emerald-100" : "bg-orange-100"}`}>
                       {log.direction === "IN" ? (
@@ -584,6 +599,7 @@ export function GatePasses() {
         </div>
       )}
 
+      {!isParentAccess && (
       <Card className="no-print">
         <CardHeader>
           <CardTitle>Recent gate activity</CardTitle>
@@ -603,6 +619,7 @@ export function GatePasses() {
           ))}
         </CardContent>
       </Card>
+      )}
     </div>
   );
 }

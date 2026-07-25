@@ -1,30 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 import {
   BookOpen,
   Calendar,
-  Clock3,
   DollarSign,
   GraduationCap,
-  Printer,
-  QrCode,
-  Car,
   TrendingUp,
 } from "lucide-react";
 import { PageHeader } from "./ui/page-header";
-import { useGatePasses } from "../contexts/GatePassContext";
 
 interface ParentDashboardProps {
   userData: any;
 }
 
 export function ParentDashboard({ userData }: ParentDashboardProps) {
-  const { passes, activePasses } = useGatePasses();
-  const currentPass = activePasses[0] ?? passes[0] ?? null;
-
   const childrenData = [
     {
       name: "Emma Watson",
@@ -66,110 +56,6 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
         title="Parent Portal"
         subtitle={`Welcome, ${userData.name}! Track your children's progress.`}
       />
-
-      {currentPass && (
-        <Card className="overflow-hidden border-blue-200 bg-gradient-to-br from-blue-50 via-white to-sky-50">
-          <CardHeader className="border-b border-blue-100">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <QrCode className="h-5 w-5 text-blue-600" />
-              Gate Pass
-            </CardTitle>
-            <p className="text-sm text-gray-600">
-              Present this pass at the gate. It is tracked in the school's in/out audit log.
-            </p>
-          </CardHeader>
-          <CardContent className="grid gap-6 lg:grid-cols-[180px_1fr]">
-            <div className="rounded-2xl bg-white p-4 shadow-sm">
-              <div className="rounded-xl bg-slate-950 p-4">
-                <div className="grid grid-cols-7 gap-1">
-                  {Array.from({ length: 7 }).map((_, row) =>
-                    Array.from({ length: 7 }).map((__, col) => {
-                      const filled =
-                        row === 0 ||
-                        row === 6 ||
-                        col === 0 ||
-                        col === 6 ||
-                        (row >= 2 && row <= 4 && col >= 2 && col <= 4);
-                      return (
-                        <div
-                          key={`${row}-${col}`}
-                          className={`aspect-square rounded-[2px] ${filled ? "bg-white" : "bg-slate-900"}`}
-                        />
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="grid gap-3 md:grid-cols-2">
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Pass code</p>
-                  <p className="text-xl font-semibold text-gray-900">{currentPass.passCode}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Status</p>
-                  <Badge variant={currentPass.status === "Checked Out" ? "secondary" : "default"}>
-                    {currentPass.status}
-                  </Badge>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Student</p>
-                  <p className="font-medium text-gray-900">{currentPass.studentName}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Parent / guardian</p>
-                  <p className="font-medium text-gray-900">{currentPass.parentName}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Gate</p>
-                  <p className="font-medium text-gray-900">{currentPass.gate}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Vehicle</p>
-                  <p className="flex items-center gap-2 font-medium text-gray-900">
-                    <Car className="h-4 w-4 text-gray-500" />
-                    {currentPass.vehicleType}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-gray-500">Valid until</p>
-                  <p className="font-medium text-gray-900">{currentPass.validUntil}</p>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-gray-900">Recent gate activity</p>
-                  <Button variant="outline" size="sm" onClick={() => window.print()}>
-                    <Printer className="mr-2 h-4 w-4" />
-                    Print
-                  </Button>
-                </div>
-                {currentPass.logs.slice(0, 3).map((log) => (
-                  <div key={log.id} className="flex items-start gap-3 rounded-xl bg-white p-3 shadow-sm">
-                    <div className={`mt-0.5 rounded-full p-2 ${log.direction === "IN" ? "bg-emerald-100" : "bg-orange-100"}`}>
-                      <Clock3 className={`h-4 w-4 ${log.direction === "IN" ? "text-emerald-600" : "text-orange-600"}`} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {log.direction === "IN" ? "Entry" : "Exit"} recorded at {log.gate}
-                      </p>
-                      <p className="text-xs text-gray-600">{log.note}</p>
-                      <p className="mt-1 text-xs text-gray-500">{log.timestamp}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      <Separator />
 
       {childrenData.map((child, index) => (
         <div key={index} className="space-y-4">

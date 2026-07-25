@@ -144,11 +144,11 @@ export default function App() {
       { id: "classes" as View, label: "Classes", icon: BookOpen, roles: ["admin", "teacher"], category: "MANAGEMENT" },
       { id: "tuitions" as View, label: "Tuitions", icon: DollarSign, roles: ["admin"], category: "MANAGEMENT" },
       { id: "staff" as View, label: "School Staff", icon: BookOpen, roles: ["admin"], category: "MANAGEMENT" },
+      { id: "gate-passes" as View, label: "Gate Passes", icon: QrCode, roles: ["admin", "parent"], category: "MANAGEMENT" },
       { id: "sick-leaves" as View, label: "Sick Leaves", icon: Stethoscope, roles: ["admin", "teacher", "parent"], category: "MANAGEMENT" },
       
       // Admin / Config
       { id: "parents" as View, label: "Parent Accounts", icon: Users, roles: ["admin"], category: "ADMINISTRATION" },
-      { id: "gate-passes" as View, label: "Gate Passes", icon: QrCode, roles: ["admin"], category: "ADMINISTRATION" },
       { id: "pace-management" as View, label: "PACE Config", icon: Settings, roles: ["admin", "teacher", "parent"], category: "ADMINISTRATION" },
       { id: "settings" as View, label: "School Settings", icon: Settings, roles: ["admin"], category: "ADMINISTRATION" },
     ];
@@ -207,7 +207,7 @@ export default function App() {
       case "parents":
         return <ParentControls />;
       case "gate-passes":
-        return <GatePasses />;
+        return <GatePasses userRole={userRole} />;
       case "staff":
         return <TeacherControls />;
       case "attendance":
