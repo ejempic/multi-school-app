@@ -33,7 +33,7 @@ export function LandingPage() {
       ? "localhost"
       : hostname.split(".").slice(-2).join(".");
     const targetHost = `${subdomain}.${rootDomain}`;
-    const targetUrl = `${protocol}//${targetHost}${port ? `:${port}` : ""}`;
+    const targetUrl = `${protocol}//${targetHost}${port ? `:${port}` : ""}`;                        
     window.location.href = targetUrl;
   };
 
