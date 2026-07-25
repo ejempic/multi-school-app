@@ -26,6 +26,7 @@ import { TenantManagement } from "./components/TenantManagement";
 import { PlanManagement } from "./components/PlanManagement";
 import { ClinicManagement } from "./components/ClinicManagement";
 import { LibraryManagement } from "./components/LibraryManagement";
+import { GatePasses } from "./components/GatePasses";
 import { Settings as SettingsComponent } from "./components/Settings";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
@@ -41,6 +42,7 @@ import {
   X,
   LogOut,
   Barcode,
+  QrCode,
   Layers,
   Settings,
   ArrowLeft,
@@ -70,7 +72,7 @@ const getContrastDetails = (hexColor?: string) => {
   };
 };
 
-type View = "dashboard" | "students" | "classes" | "grades" | "tuitions" | "announcements" | "calendar" | "parents" | "staff" | "attendance" | "phases" | "pace-management" | "sick-leaves" | "behavior" | "tenants" | "plans" | "clinic" | "library" | "settings";
+type View = "dashboard" | "students" | "classes" | "grades" | "tuitions" | "announcements" | "calendar" | "parents" | "staff" | "attendance" | "phases" | "pace-management" | "sick-leaves" | "behavior" | "tenants" | "plans" | "gate-passes" | "clinic" | "library" | "settings";
 type UserRole = "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | null;
 
 interface UserData {
@@ -146,6 +148,7 @@ export default function App() {
       
       // Admin / Config
       { id: "parents" as View, label: "Parent Accounts", icon: Users, roles: ["admin"], category: "ADMINISTRATION" },
+      { id: "gate-passes" as View, label: "Gate Passes", icon: QrCode, roles: ["admin"], category: "ADMINISTRATION" },
       { id: "pace-management" as View, label: "PACE Config", icon: Settings, roles: ["admin", "teacher", "parent"], category: "ADMINISTRATION" },
       { id: "settings" as View, label: "School Settings", icon: Settings, roles: ["admin"], category: "ADMINISTRATION" },
     ];
@@ -203,6 +206,8 @@ export default function App() {
         return <CalendarView userRole={userRole as "admin" | "teacher" | "parent" | "student"} />;
       case "parents":
         return <ParentControls />;
+      case "gate-passes":
+        return <GatePasses />;
       case "staff":
         return <TeacherControls />;
       case "attendance":
