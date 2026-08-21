@@ -1,0 +1,17 @@
+services:
+  eskuwela-web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: eskuwela-web
+    restart: unless-stopped
+    ports:
+      - "${ESKUWELA_WEB_PORT:-8090}:8080"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: eskuwela-cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN:?Set CLOUDFLARED_TOKEN in home-server/.env}
+    depends_on:
+      - eskuwela-web

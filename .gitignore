@@ -22,6 +22,8 @@ Thumbs.db
 # Build outputs
 dist/
 build/
+.certs/
+*.srl
 *.log
 
 # Database

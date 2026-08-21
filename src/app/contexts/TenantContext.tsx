@@ -1,6 +1,41 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { Tenant, tenants } from "../data/tenants";
 
+const ROOT_DOMAINS = ["eskuwela.ph", "eskuwela.dev"];
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1"]);
+
+const normalizeHostname = (hostname: string) => hostname.replace(/^www\./, "");
+
+const getSubdomainFromHostname = (hostname: string) => {
+  const normalized = normalizeHostname(hostname);
+
+  if (LOCAL_HOSTS.has(normalized)) {
+    return "";
+  }
+
+  if (ROOT_DOMAINS.includes(normalized)) {
+    return "";
+  }
+
+  const matchedRoot = ROOT_DOMAINS.find((root) => normalized.endsWith(`.${root}`));
+  if (matchedRoot) {
+    const remainder = normalized.slice(0, -1 * (`.${matchedRoot}`.length));
+    return remainder.split(".").pop() || "";
+  }
+
+  if (normalized.includes("localhost")) {
+    const parts = normalized.split(".");
+    return parts.length > 1 ? parts[0] : "";
+  }
+
+  const parts = normalized.split(".");
+  if (parts.length <= 2) {
+    return "";
+  }
+
+  return parts[0] === "www" ? "" : parts[0];
+};
+
 interface TenantContextType {
   currentTenant: Tenant | null;
   setTenant: (tenantId: string) => void;
@@ -27,20 +62,8 @@ export function TenantProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // 1. Check for subdomain
-    const hostname = window.location.hostname;
-    const parts = hostname.split(".");
-    let subdomain = "";
-    
-    // Simplistic subdomain extraction:
-    // If localhost, we might not have a subdomain unless configured like "sub.localhost"
-    // Ideally: tenant.domain.com -> 'tenant'
-    if (parts.length > 1 && !hostname.includes("localhost")) {
-        subdomain = parts[0];
-    } else if (hostname.includes("localhost") && parts.length > 1) {
-       // Handle "sub.localhost"
-       subdomain = parts[0];
-    }
+    const hostname = normalizeHostname(window.location.hostname);
+    const subdomain = getSubdomainFromHostname(hostname);
 
     // 2. Check for query param override (for dev/testing)
     const params = new URLSearchParams(window.location.search);
@@ -52,15 +75,13 @@ export function TenantProvider({ children }: { children: ReactNode }) {
       tenant = tenants.find(t => t.id === tenantParam || t.subdomain === tenantParam);
     } else if (subdomain) {
       tenant = tenants.find(t => t.subdomain === subdomain);
+    } else if (
+      ROOT_DOMAINS.includes(hostname) ||
+      LOCAL_HOSTS.has(hostname) ||
+      ROOT_DOMAINS.some((root) => hostname === `www.${root}`)
+    ) {
+      tenant = null;
     }
-
-    // Fallback for dev: default to first tenant if on localhost with no subdomain/param
-    // Removing the default behavior to allow for a landing page on the root domain
-    /*
-    if (!tenant && hostname.includes("localhost") && parts.length === 1) {
-       tenant = tenants[0]; // defaults to gtwfsl
-    }
-    */
 
     if (tenant) {
       setCurrentTenant(tenant);

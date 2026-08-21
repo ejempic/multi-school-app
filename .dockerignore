@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.certs
+home-server/logs
+*.log
+.env
+.env.*
+.DS_Store

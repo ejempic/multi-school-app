@@ -1,32 +1,32 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
-import { Login } from "./components/Login";
-import { Dashboard } from "./components/Dashboard";
-import { LandingPage } from "./components/LandingPage";
-import { TenantLandingPage } from "./components/TenantLandingPage";
+import { Login } from "./pages/public/Login";
+import { Dashboard } from "./pages/dashboard/Dashboard";
+import { LandingPage } from "./pages/public/LandingPage";
+import { TenantLandingPage } from "./pages/public/TenantLandingPage";
 import { useTenant } from "./contexts/TenantContext";
-import { Students } from "./components/Students";
-import { Classes } from "./components/Classes";
-import { Grades } from "./components/Grades";
-import { Tuitions } from "./components/Tuitions";
-import { Announcements } from "./components/Announcements";
-import { CalendarView } from "./components/CalendarView";
-import { ParentDashboard } from "./components/ParentDashboard";
-import { TeacherDashboard } from "./components/TeacherDashboard";
-import { StudentDashboard } from "./components/StudentDashboard";
-import { ParentControls } from "./components/ParentControls";
-import { TeacherControls } from "./components/TeacherControls";
-import { Attendance } from "./components/Attendance";
-import { StudentScanner } from "./components/StudentScanner";
-import { Phases } from "./components/Phases";
-import { PaceManagement } from "./components/PaceManagement";
-import { SickLeaves } from "./components/SickLeaves";
-import { BehaviorManager } from "./components/BehaviorManager";
-import { TenantManagement } from "./components/TenantManagement";
-import { PlanManagement } from "./components/PlanManagement";
-import { ClinicManagement } from "./components/ClinicManagement";
-import { LibraryManagement } from "./components/LibraryManagement";
-import { Settings as SettingsComponent } from "./components/Settings";
+import { Students } from "./pages/management/Students";
+import { Classes } from "./pages/management/Classes";
+import { Grades } from "./pages/academic/Grades";
+import { Tuitions } from "./pages/management/Tuitions";
+import { Announcements } from "./pages/communication/Announcements";
+import { CalendarView } from "./pages/communication/CalendarView";
+import { ParentDashboard } from "./pages/dashboard/ParentDashboard";
+import { TeacherDashboard } from "./pages/dashboard/TeacherDashboard";
+import { StudentDashboard } from "./pages/dashboard/StudentDashboard";
+import { ParentControls } from "./pages/management/ParentControls";
+import { TeacherControls } from "./pages/management/TeacherControls";
+import { Attendance } from "./pages/academic/Attendance";
+import { StudentScanner } from "./pages/tools/StudentScanner";
+import { Phases } from "./pages/academic/Phases";
+import { PaceManagement } from "./pages/academic/PaceManagement";
+import { SickLeaves } from "./pages/academic/SickLeaves";
+import { BehaviorManager } from "./pages/academic/BehaviorManager";
+import { TenantManagement } from "./pages/platform/TenantManagement";
+import { PlanManagement } from "./pages/platform/PlanManagement";
+import { ClinicManagement } from "./pages/management/ClinicManagement";
+import { LibraryManagement } from "./pages/management/LibraryManagement";
+import { Settings as SettingsComponent } from "./pages/platform/Settings";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
 import {
@@ -86,11 +86,32 @@ export default function App() {
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [currentView, setCurrentView] = useState<View>("dashboard");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia("(min-width: 1024px)").matches;
+  });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia("(min-width: 1024px)").matches;
+  });
   const navigate = useNavigate();
   const { currentTenant } = useTenant();
   
   const theme = getContrastDetails(currentTenant?.theme?.background);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const syncSidebarForViewport = (matches: boolean) => {
+      setIsDesktop(matches);
+      setIsSidebarOpen(matches);
+    };
+
+    syncSidebarForViewport(mediaQuery.matches);
+    const handleChange = (event: MediaQueryListEvent) => syncSidebarForViewport(event.matches);
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   // If no tenant is selected, show the landing page (unless we are on a specific route that shouldn't be blocked?)
   // Actually, we can just conditionally render the whole App structure or the Landing Page.
@@ -288,14 +309,14 @@ export default function App() {
         ) : (
           <>
             <div 
-              className="min-h-screen transition-colors duration-300"
+              className="flex h-screen flex-col overflow-hidden transition-colors duration-300"
               style={{ backgroundColor: currentTenant?.theme?.background || '#f9fafb', color: theme.textColor }}
             >
-             <style>{`\n              :root {\n                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};\n                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};\n                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};\n                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};\n                --theme-text: ${theme.textColor};\n                --theme-border: ${theme.borderColor};\n                --theme-card-bg: ${theme.cardBg};\n                --theme-nav-hover: ${theme.isDark ? 'rgba(255,255,255,0.08)' : 'rgba(30,58,138,0.08)'};\n                --theme-nav-active: ${currentTenant?.theme?.secondary || '#2563eb'};\n                --theme-nav-text: ${theme.textColor};\n                --theme-nav-muted: ${theme.subTextColor};\n              }\n              body {\n                color: var(--theme-text);\n              }\n              h1, h2, h3, h4, h5, h6 {\n                color: var(--theme-text) !important;\n              }\n              .text-muted-foreground {\n                color: var(--theme-nav-muted) !important;\n              }\n              .border-gray-200, .border-b, .border-r {\n                border-color: var(--theme-border) !important;\n              }\n              .bg-white {\n                background-color: var(--theme-card-bg) !important;\n              }\n              .sidebar-wrapper {\n                 background-color: var(--theme-background) !important;\n                 border-right: 1px solid var(--theme-border) !important;\n              }\n              .sidebar-wrapper button {\n                color: var(--theme-nav-text) !important;\n                background: none;\n                transition: background 0.15s, color 0.15s;\n              }\n              .sidebar-wrapper button:hover {\n                background: var(--theme-nav-hover) !important;\n                color: var(--theme-nav-text) !important;\n              }\n              .sidebar-wrapper button[aria-current=\"page\"],\n              .sidebar-wrapper button.active {\n                background: var(--theme-nav-active) !important;\n                color: #fff !important;\n              }\n            `}</style>
+             <style>{`\n              :root {\n                --theme-primary: ${currentTenant?.theme?.primary || '#1e3a8a'};\n                --theme-secondary: ${currentTenant?.theme?.secondary || '#1d4ed8'};\n                --theme-accent: ${currentTenant?.theme?.accent || '#eab308'};\n                --theme-background: ${currentTenant?.theme?.background || '#f9fafb'};\n                --theme-text: ${theme.textColor};\n                --theme-border: ${theme.borderColor};\n                --theme-card-bg: ${theme.cardBg};\n                --theme-nav-hover: ${theme.isDark ? 'rgba(255,255,255,0.08)' : 'rgba(30,58,138,0.08)'};\n                --theme-nav-active: ${currentTenant?.theme?.secondary || '#2563eb'};\n                --theme-nav-text: ${theme.textColor};\n                --theme-nav-muted: ${theme.subTextColor};\n              }\n              body {\n                color: var(--theme-text);\n              }\n              h1, h2, h3, h4, h5, h6 {\n                color: var(--theme-text) !important;\n              }\n              .theme-inverted h1,\n              .theme-inverted h2,\n              .theme-inverted h3,\n              .theme-inverted h4,\n              .theme-inverted h5,\n              .theme-inverted h6 {\n                color: #fff !important;\n              }\n              .text-muted-foreground {\n                color: var(--theme-nav-muted) !important;\n              }\n              .border-gray-200, .border-b, .border-r {\n                border-color: var(--theme-border) !important;\n              }\n              .bg-white {\n                background-color: var(--theme-card-bg) !important;\n              }\n              .sidebar-wrapper {\n                 background-color: var(--theme-background) !important;\n                 border-right: 1px solid var(--theme-border) !important;\n              }\n              .sidebar-wrapper button {\n                color: var(--theme-nav-text) !important;\n                background: none;\n                transition: background 0.15s, color 0.15s;\n              }\n              .sidebar-wrapper button:hover {\n                background: var(--theme-nav-hover) !important;\n                color: var(--theme-nav-text) !important;\n              }\n              .sidebar-wrapper button[aria-current=\"page\"],\n              .sidebar-wrapper button.active {\n                background: var(--theme-nav-active) !important;\n                color: #fff !important;\n              }\n            `}</style>
               <Toaster />
               {/* Header */}
               <header 
-                className="sticky top-0 z-40 transition-colors duration-300"
+                className="sticky top-0 z-40 shrink-0 transition-colors duration-300"
                 style={{ 
                     backgroundColor: currentTenant?.theme?.background || '#ffffff',
                     borderBottomColor: theme.borderColor
@@ -366,14 +387,14 @@ export default function App() {
                 </div>
               </header>
 
-              <div className="flex">
+              <div className="flex min-h-0 flex-1 overflow-hidden">
                 {/* Sidebar */}
                 <aside
                   className={`sidebar-wrapper ${
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                  } lg:translate-x-0 fixed lg:sticky top-[73px] left-0 z-30 h-[calc(100vh-73px)] w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out`}
+                  } fixed left-0 top-[73px] z-30 flex h-[calc(100dvh-73px)] w-64 shrink-0 flex-col overflow-hidden bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-full lg:translate-x-0`}
                 >
-                  <nav className="p-4 space-y-4">
+                  <nav className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4 pb-6">
                     {/* User Role Badge */}
                     <div 
                       className="mb-2 p-3 bg-blue-50 rounded-lg"
@@ -416,13 +437,14 @@ export default function App() {
                               return (
                                 <button
                                   key={item.id}
+                                  aria-current={isActive ? "page" : undefined}
                                   onClick={() => {
                                     setCurrentView(item.id);
                                     if (window.innerWidth < 1024) {
                                       setIsSidebarOpen(false);
                                     }
                                   }}
-                                  className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all ${
+                                  className={`w-full min-w-0 flex items-center gap-3 px-4 py-2 rounded-lg transition-all ${
                                     isActive
                                       ? "bg-blue-600 text-white shadow-md shadow-blue-200"
                                       : "hover:bg-opacity-10 hover:bg-gray-500"
@@ -430,14 +452,15 @@ export default function App() {
                                   style={{
                                     ...(isActive ? {
                                       backgroundColor: currentTenant?.theme?.secondary || '#2563eb',
+                                      color: '#ffffff',
                                       boxShadow: `0 4px 6px -1px ${currentTenant?.theme?.secondary}40`
                                     } : {
                                         color: theme.subTextColor
                                     })
                                   }}
                                 >
-                                  <Icon className="h-4 w-4" />
-                                  <span className="text-sm font-medium">{item.label}</span>
+                                  <Icon className="h-4 w-4 shrink-0" />
+                                  <span className="truncate text-sm font-medium">{item.label}</span>
                                 </button>
                               );
                             })}
@@ -448,17 +471,17 @@ export default function App() {
                 </aside>
 
                 {/* Main Content */}
-                <main className="flex-1 p-6 lg:p-8">
-                  <div className="max-w-7xl mx-auto">
+                <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain p-4 sm:p-6 lg:p-8">
+                  <div key={currentView} className="mx-auto w-full max-w-7xl animate-in fade-in-0 slide-in-from-bottom-1 duration-200">
                     {renderView()}
                   </div>
                 </main>
               </div>
 
               {/* Overlay for mobile */}
-              {isSidebarOpen && (
+              {isSidebarOpen && !isDesktop && (
                 <div
-                  className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
+                  className="fixed inset-0 z-20 bg-black/50"
                   onClick={() => setIsSidebarOpen(false)}
                 />
               )}

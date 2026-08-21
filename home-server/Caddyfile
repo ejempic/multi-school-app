@@ -1,0 +1,23 @@
+:8080 {
+  root * /srv
+  encode zstd gzip
+
+  @static {
+    file
+  }
+
+  handle @static {
+    file_server
+  }
+
+  handle {
+    try_files {path} /index.html
+    file_server
+  }
+
+  header {
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
+}
