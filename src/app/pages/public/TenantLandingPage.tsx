@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
@@ -149,6 +150,24 @@ export function TenantLandingPage({ tenant, onLogin }: TenantLandingPageProps) {
     label: stat.label,
     value: stat.value,
   }));
+
+  useEffect(() => {
+    document.title = `${tenant.name} - Home`;
+
+    if (!tenant.logo) {
+      return;
+    }
+
+    let favicon = document.querySelector<HTMLLinkElement>("link[rel='icon']");
+
+    if (!favicon) {
+      favicon = document.createElement("link");
+      favicon.rel = "icon";
+      document.head.appendChild(favicon);
+    }
+
+    favicon.href = tenant.logo;
+  }, [tenant.name, tenant.logo]);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900" style={{ backgroundColor: background }}>
