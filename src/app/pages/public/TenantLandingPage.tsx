@@ -1,19 +1,37 @@
 import { Button } from "@/app/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Badge } from "@/app/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
+import { Textarea } from "@/app/components/ui/textarea";
 import {
-  GraduationCap,
-  ShieldCheck,
-  Users,
   ArrowRight,
-  MapPin,
-  Phone,
-  Mail,
-  Clock3,
-  Sparkles,
   BadgeInfo,
   BookOpen,
+  Building2,
+  CalendarDays,
+  ChevronRight,
   CircleCheckBig,
+  Clock3,
+  Dumbbell,
+  Facebook,
+  FlaskConical,
+  GraduationCap,
+  Instagram,
+  LibraryBig,
+  Mail,
+  MapPin,
+  Megaphone,
+  MessageSquareQuote,
+  Phone,
+  School,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  UtensilsCrossed,
+  Youtube,
 } from "lucide-react";
+import landingContent from "@/app/data/tenantLandingPage.json";
 import { Tenant } from "@/app/data/tenants";
 
 interface TenantLandingPageProps {
@@ -21,38 +39,145 @@ interface TenantLandingPageProps {
   onLogin: () => void;
 }
 
+type NavItem = { label: string; href: string };
+type ListItem = { title: string; description: string };
+type HeroContent = {
+  eyebrow: string;
+  headline: string;
+  tagline: string;
+  intro: string;
+  primaryCta: string;
+  secondaryCta: string;
+  imageUrl: string;
+  imageAlt: string;
+};
+type AboutContent = {
+  history: string;
+  mission: string;
+  vision: string;
+  coreValues: string[];
+};
+type ProgramContent = { level: string; description: string };
+type StatContent = { label: string; value: string; detail: string };
+type FacilityContent = { title: string; description: string };
+type NewsItem = { date: string; title: string; category: string; summary: string };
+type AdmissionsContent = { requirements: string[]; process: string[]; dates: string; cta: string };
+type GalleryItem = { title: string; caption: string; imageUrl: string };
+type Testimonial = { name: string; role: string; quote: string };
+type ContactContent = {
+  address: string;
+  phone: string;
+  email: string;
+  officeHours: string;
+  mapQuery: string;
+  socialLinks: Array<{ label: string; href: string }>;
+};
+type FooterContent = { quickLinks: NavItem[] };
+type LandingContent = {
+  navigation: NavItem[];
+  hero: HeroContent;
+  about: AboutContent;
+  programs: ProgramContent[];
+  whyChooseUs: ListItem[];
+  statistics: StatContent[];
+  facilities: FacilityContent[];
+  news: NewsItem[];
+  admissions: AdmissionsContent;
+  gallery: GalleryItem[];
+  testimonials: Testimonial[];
+  contact: ContactContent;
+  footer: FooterContent;
+};
+
+const contentMap = landingContent as Record<string, LandingContent>;
+
+const sectionIcons = {
+  whyChooseUs: [CircleCheckBig, ShieldCheck, Sparkles, Users, GraduationCap, BadgeInfo],
+  facilities: [School, Building2, FlaskConical, LibraryBig, Dumbbell, UtensilsCrossed],
+  programs: [Sparkles, BookOpen, GraduationCap, Users, School],
+};
+
+const fallbackContent = contentMap.default;
+
+const socialIconMap = {
+  Facebook,
+  Instagram,
+  YouTube: Youtube,
+} as const;
+
+const socialPillStyleMap = {
+  Facebook: "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800",
+  Instagram: "border-pink-200 bg-pink-50 text-pink-700 hover:bg-pink-100 hover:text-pink-800",
+  YouTube: "border-red-200 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800",
+} as const;
+
+const mergeContent = (base: LandingContent, override?: Partial<LandingContent>): LandingContent => ({
+  ...base,
+  ...override,
+  navigation: override?.navigation ?? base.navigation,
+  hero: { ...base.hero, ...override?.hero },
+  about: { ...base.about, ...override?.about },
+  programs: override?.programs ?? base.programs,
+  whyChooseUs: override?.whyChooseUs ?? base.whyChooseUs,
+  statistics: override?.statistics ?? base.statistics,
+  facilities: override?.facilities ?? base.facilities,
+  news: override?.news ?? base.news,
+  admissions: { ...base.admissions, ...override?.admissions },
+  gallery: override?.gallery ?? base.gallery,
+  testimonials: override?.testimonials ?? base.testimonials,
+  contact: {
+    ...base.contact,
+    ...override?.contact,
+    socialLinks: override?.contact?.socialLinks ?? base.contact.socialLinks,
+  },
+  footer: {
+    ...base.footer,
+    ...override?.footer,
+    quickLinks: override?.footer?.quickLinks ?? base.footer.quickLinks,
+  },
+});
+
 export function TenantLandingPage({ tenant, onLogin }: TenantLandingPageProps) {
   const primary = tenant.theme?.primary || "#1e3a8a";
   const secondary = tenant.theme?.secondary || "#1d4ed8";
   const accent = tenant.theme?.accent || "#0ea5e9";
   const background = tenant.theme?.background || "#f8fafc";
-  const heroStats = tenant.heroStats || [
-    { label: "School Year", value: tenant.currentSchoolYear || "Open for inquiries" },
-    { label: "Location", value: tenant.address || "Available on request" },
-    { label: "Portal", value: "School portal ready" },
-  ];
-  const highlights = tenant.highlights || [
-    "School information and contact details",
-    "Login access for staff, parents, and students",
-    "Announcements, grades, attendance, and updates",
-  ];
-  const schoolLevels = tenant.schoolLevels || ["Pre-K", "Elementary", "Secondary"];
+
+  const content = mergeContent(fallbackContent, contentMap[tenant.id] as Partial<LandingContent> | undefined);
+  const heroHeadline = content.hero.headline.replace("{schoolName}", tenant.name);
+  const quickStats = tenant.heroStats?.length ? tenant.heroStats : content.statistics.slice(0, 3).map((stat) => ({
+    label: stat.label,
+    value: stat.value,
+  }));
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: background }}>
-      <header className="border-b bg-white/90 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-slate-50 text-slate-900" style={{ backgroundColor: background }}>
+      <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
+          <a href="#home" className="flex min-w-0 items-center gap-3">
             {tenant.logo ? (
-              <img src={tenant.logo} alt={`${tenant.name} logo`} className="h-10 w-10 object-contain" />
+              <img src={tenant.logo} alt={`${tenant.name} logo`} className="h-12 w-12 shrink-0 object-contain" />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded bg-slate-900 text-sm font-bold text-white">SC</div>
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-sm font-bold text-white">
+                SC
+              </div>
             )}
-            <div className="leading-tight">
-              <p className="text-sm font-bold" style={{ color: primary }}>{tenant.name}</p>
-              <p className="text-xs text-slate-500">{tenant.tagline || "School domain"}</p>
+            <div className="min-w-0 leading-tight">
+              <p className="truncate text-sm font-bold" style={{ color: primary }}>
+                {tenant.name}
+              </p>
+              <p className="truncate text-xs text-slate-500">{tenant.tagline || "School domain"}</p>
             </div>
-          </div>
+          </a>
+
+          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 lg:flex">
+            {content.navigation.map((item) => (
+              <a key={item.label} href={item.href} className="transition-colors hover:text-slate-950">
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
           <div className="flex items-center gap-2">
             <Button variant="outline" asChild>
               <a href="#contact">Contact</a>
@@ -65,239 +190,506 @@ export function TenantLandingPage({ tenant, onLogin }: TenantLandingPageProps) {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-10 lg:py-16">
-        <section className="grid gap-8 lg:grid-cols-[1.4fr_0.9fr] lg:items-center">
-          <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 shadow-sm">
-              <Sparkles className="h-4 w-4" style={{ color: primary }} />
-              {tenant.currentSchoolYear || "Current School Year"}
+      <main id="home">
+        <section className="border-b bg-gradient-to-b from-white via-slate-50 to-slate-100">
+          <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:px-6 lg:py-16">
+            <div className="order-3 flex flex-col justify-center lg:order-1">
+              <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 shadow-sm">
+                <Sparkles className="h-4 w-4" style={{ color: primary }} />
+                {content.hero.eyebrow}
+              </div>
+
+              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-slate-950 lg:text-6xl">
+                {heroHeadline}
+              </h1>
+              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">{content.hero.tagline}</p>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">{content.hero.intro}</p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button size="lg" asChild style={{ backgroundColor: secondary }}>
+                  <a href="#contact">{content.hero.primaryCta}</a>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <a href="#about">{content.hero.secondaryCta}</a>
+                </Button>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                {quickStats.map((stat) => (
+                  <Card key={stat.label} className="border-none bg-white/90 shadow-sm">
+                    <CardContent className="p-4">
+                      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{stat.label}</p>
+                      <p className="mt-2 text-lg font-bold text-slate-900">{stat.value}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
 
-            <h1 className="text-4xl font-black tracking-tight text-slate-950 lg:text-6xl">
-              Welcome to {tenant.name}
-            </h1>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-              {tenant.about || "A dedicated school homepage with the latest information, school contacts, and portal access."}
-            </p>
+            <Card className="order-1 overflow-hidden border-none bg-white/95 shadow-xl lg:order-2">
+              <div className="relative aspect-[4/3]">
+                <img
+                  src={content.hero.imageUrl}
+                  alt={content.hero.imageAlt}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-slate-950/10 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em]">
+                    <BadgeInfo className="h-4 w-4" />
+                    School Snapshot
+                  </div>
+                  <p className="max-w-xl text-sm leading-6 text-white/85">
+                    {tenant.about || content.about.history}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
 
-            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-              {tenant.mission || "We help schools present a clear public homepage while keeping portals and operations in one place."}
-            </p>
+        <section id="about" className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+          <Card className="overflow-hidden border-none shadow-sm">
+            <CardHeader className="border-b bg-white">
+              <div className="flex items-start gap-4">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-white shadow-sm"
+                  style={{ background: `linear-gradient(135deg, ${primary}, ${secondary})` }}
+                >
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">About the School</CardTitle>
+                  <CardDescription className="mt-1">
+                    A clear view of the school story, direction, and guiding values.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6 p-6 lg:p-8">
+              <div className="relative overflow-hidden rounded-3xl border border-slate-200">
+                {content.hero.imageUrl ? (
+                  <div
+                    className="absolute inset-0 bg-cover bg-center opacity-15 grayscale"
+                    style={{ backgroundImage: `url(${content.hero.imageUrl})` }}
+                  />
+                ) : null}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(135deg, ${primary}14 0%, ${secondary}10 38%, rgba(255,255,255,0.96) 100%)`,
+                  }}
+                />
+                <div className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: secondary }} />
+                <div className="relative px-6 py-8 lg:px-8 lg:py-10">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">School Story</p>
+                  <p className="max-w-5xl text-sm leading-8 text-slate-700 lg:text-base">
+                    {content.about.history} This school page is designed to give families a fuller view of the campus,
+                    the academic direction, and the kind of environment students experience each day. It brings together
+                    the school&apos;s public-facing information in one place so parents, learners, and visitors can
+                    understand the character of the institution before they make contact or begin the admissions process.
+                  </p>
+                </div>
+              </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" onClick={onLogin} style={{ backgroundColor: secondary }}>
-                Proceed to Login
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <a href="#about">Explore School Info</a>
-              </Button>
+              <div className="grid gap-4 lg:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
+                      <Sparkles className="h-4 w-4" style={{ color: primary }} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mission</p>
+                      <p className="text-sm font-semibold text-slate-900">What we commit to do</p>
+                    </div>
+                  </div>
+                  <p className="text-sm leading-7 text-slate-600">{content.about.mission}</p>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
+                      <ShieldCheck className="h-4 w-4" style={{ color: accent }} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Vision</p>
+                      <p className="text-sm font-semibold text-slate-900">Where the school is headed</p>
+                    </div>
+                  </div>
+                  <p className="text-sm leading-7 text-slate-600">{content.about.vision}</p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Core Values</p>
+                <p className="mt-2 text-sm font-semibold text-slate-900">The principles behind daily school life</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {content.about.coreValues.map((value) => (
+                    <Badge key={value} variant="outline" className="rounded-full px-3 py-1 text-xs font-semibold">
+                      {value}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section id="programs" className="border-y bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+            <div className="mb-8 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Programs</p>
+                <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Courses Offered</h2>
+              </div>
             </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+              {content.programs.map((program, index) => {
+                const Icon = sectionIcons.programs[index % sectionIcons.programs.length];
+                return (
+                  <Card key={program.level} className="border-slate-200 shadow-sm">
+                    <CardContent className="space-y-4 p-5">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100">
+                        <Icon className="h-5 w-5" style={{ color: primary }} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{program.level}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{program.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              {heroStats.map((stat) => (
-                <Card key={stat.label} className="border-none bg-white/90 shadow-sm">
-                  <CardContent className="p-4">
-                    <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{stat.label}</p>
-                    <p className="mt-2 text-lg font-bold text-slate-900">{stat.value}</p>
+        <section className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {content.statistics.map((stat) => (
+              <Card key={stat.label} className="border-none bg-white shadow-sm">
+                <CardContent className="space-y-2 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{stat.label}</p>
+                  <p className="text-3xl font-black text-slate-950">{stat.value}</p>
+                  <p className="text-sm leading-6 text-slate-600">{stat.detail}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section id="facilities" className="border-y bg-slate-50">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+            <div className="mb-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Facilities</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Spaces That Support Learning</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {content.facilities.map((facility, index) => {
+                const Icon = sectionIcons.facilities[index % sectionIcons.facilities.length];
+                return (
+                  <Card key={facility.title} className="border-none shadow-sm">
+                    <CardContent className="space-y-4 p-5">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white shadow-sm">
+                          <Icon className="h-5 w-5" style={{ color: accent }} />
+                        </div>
+                        <p className="text-base font-semibold text-slate-950">{facility.title}</p>
+                      </div>
+                      <p className="text-sm leading-6 text-slate-600">{facility.description}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section id="news" className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+          <div className="mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">News</p>
+            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Announcements and Latest Updates</h2>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {content.news.map((item) => (
+              <Card key={item.title} className="border-none shadow-sm">
+                <CardContent className="flex gap-4 p-5">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-100">
+                    <Megaphone className="h-5 w-5" style={{ color: primary }} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="mb-2 flex items-center gap-2">
+                      <Badge variant="outline" className="rounded-full px-2 py-0.5 text-[10px] uppercase tracking-[0.2em]">
+                        {item.category}
+                      </Badge>
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{item.date}</span>
+                    </div>
+                    <p className="text-base font-semibold text-slate-950">{item.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">{item.summary}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section id="admissions" className="border-y bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+            <div className="mb-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Admissions</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Enrollment and Requirements</h2>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
+              <Card className="border-none shadow-sm">
+                <CardHeader>
+                  <CardTitle>Requirements</CardTitle>
+                  <CardDescription>Documents families can prepare before enrollment.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {content.admissions.requirements.map((item) => (
+                    <div key={item} className="flex items-start gap-3 rounded-xl border bg-slate-50 px-4 py-3">
+                      <CircleCheckBig className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} />
+                      <span className="text-sm leading-6 text-slate-700">{item}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-sm">
+                <CardHeader>
+                  <CardTitle>Enrollment Process</CardTitle>
+                  <CardDescription>{content.admissions.dates}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    {content.admissions.process.map((step, index) => (
+                      <div key={step} className="flex gap-3">
+                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">
+                          {index + 1}
+                        </div>
+                        <p className="text-sm leading-6 text-slate-700">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Button className="w-full" asChild style={{ backgroundColor: secondary }}>
+                    <a href="#contact">{content.admissions.cta}</a>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        <section id="gallery" className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+          <div className="mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Gallery</p>
+            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Campus, Students, Events, and Activities</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {content.gallery.map((item) => (
+              <Card key={item.title} className="overflow-hidden border-none shadow-sm">
+                <div className="relative aspect-[4/3]">
+                  <img src={item.imageUrl} alt={item.title} className="absolute inset-0 h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-slate-950/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <p className="text-sm font-semibold">{item.title}</p>
+                    <p className="text-xs leading-5 text-white/80">{item.caption}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section id="testimonials" className="border-y bg-slate-50">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+            <div className="mb-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Testimonials</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">What Families Say</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {content.testimonials.map((testimonial) => (
+                <Card key={testimonial.name} className="border-none shadow-sm">
+                  <CardContent className="space-y-4 p-5">
+                    <MessageSquareQuote className="h-5 w-5" style={{ color: primary }} />
+                    <p className="text-sm leading-7 text-slate-700">"{testimonial.quote}"</p>
+                    <div>
+                      <p className="font-semibold text-slate-950">{testimonial.name}</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{testimonial.role}</p>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
+        </section>
 
-          <Card className="border-none bg-white/95 shadow-lg">
-            <CardHeader className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                <BadgeInfo className="h-4 w-4" style={{ color: primary }} />
-                School Snapshot
-              </div>
-              <CardTitle className="text-2xl">{tenant.address || "School details"}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="rounded-xl border bg-slate-50 p-4">
-                <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-5 w-5 flex-none" style={{ color: primary }} />
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900">Address</p>
-                    <p className="text-sm text-slate-600">{tenant.address || "No address configured yet"}</p>
-                  </div>
-                </div>
-              </div>
+        <section id="contact" className="scroll-mt-24 border-t bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+            <div className="mb-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Contact</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Get in Touch</h2>
+            </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border bg-slate-50 p-4">
-                  <div className="flex items-start gap-3">
-                    <Phone className="mt-0.5 h-5 w-5 flex-none" style={{ color: primary }} />
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">Phone</p>
-                      <p className="text-sm text-slate-600">{tenant.phone || "No phone listed"}</p>
+            <div className="grid gap-6">
+              <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+                <Card className="h-full rounded-2xl border border-slate-200 shadow-sm">
+                  <CardHeader className="pb-4">
+                    <CardTitle>School Information</CardTitle>
+                    <CardDescription>Office hours and contact details.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-5 text-sm text-slate-600">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: primary }} />
+                      <div>
+                        <p className="font-medium text-slate-900">School Address</p>
+                        <p>{tenant.address || content.contact.address}</p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="rounded-xl border bg-slate-50 p-4">
-                  <div className="flex items-start gap-3">
-                    <Mail className="mt-0.5 h-5 w-5 flex-none" style={{ color: primary }} />
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">Email</p>
-                      <p className="text-sm text-slate-600">{tenant.email || "No email listed"}</p>
+                    <div className="flex items-start gap-3">
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0" style={{ color: primary }} />
+                      <div>
+                        <p className="font-medium text-slate-900">Phone Number</p>
+                        <p>{tenant.phone || content.contact.phone}</p>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                    <div className="flex items-start gap-3">
+                      <Mail className="mt-0.5 h-4 w-4 shrink-0" style={{ color: primary }} />
+                      <div>
+                        <p className="font-medium text-slate-900">Email</p>
+                        <p>{tenant.email || content.contact.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <Clock3 className="mt-0.5 h-4 w-4 shrink-0" style={{ color: primary }} />
+                      <div>
+                        <p className="font-medium text-slate-900">Office Hours</p>
+                        <p>{tenant.officeHours || content.contact.officeHours}</p>
+                      </div>
+                    </div>
+                    <div className="pt-2">
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                        Social Links
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                      {content.contact.socialLinks.map((social) => (
+                        <Button
+                          key={social.label}
+                          variant="outline"
+                          className={`w-auto min-w-32 justify-start rounded-xl px-4 ${
+                            socialPillStyleMap[social.label as keyof typeof socialPillStyleMap] || ""
+                          }`}
+                          asChild
+                        >
+                          <a href={social.href}>
+                            {(() => {
+                              const Icon = socialIconMap[social.label as keyof typeof socialIconMap];
+                              return Icon ? <Icon className="h-4 w-4" /> : null;
+                            })()}
+                            {social.label}
+                          </a>
+                        </Button>
+                      ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="h-full rounded-2xl border border-slate-200 shadow-sm">
+                  <CardHeader className="pb-4">
+                    <CardTitle>Contact Form</CardTitle>
+                    <CardDescription>Send a school inquiry or request more information.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex h-full flex-col gap-4">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="contact-name">Name</Label>
+                        <Input id="contact-name" placeholder="Your name" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="contact-email">Email</Label>
+                        <Input id="contact-email" type="email" placeholder="you@example.com" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="contact-subject">Subject</Label>
+                      <Input id="contact-subject" placeholder="Enrollment, visit, or general inquiry" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="contact-message">Message</Label>
+                      <Textarea id="contact-message" placeholder="Write your message here..." className="min-h-40" />
+                    </div>
+                    <Button className="mt-auto w-full" style={{ backgroundColor: secondary }}>
+                      Send Inquiry
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
 
-              <div className="rounded-xl border bg-slate-50 p-4">
-                <div className="flex items-start gap-3">
-                  <Clock3 className="mt-0.5 h-5 w-5 flex-none" style={{ color: primary }} />
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900">Office hours</p>
-                    <p className="text-sm text-slate-600">{tenant.officeHours || "Weekdays during school hours"}</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        <section id="about" className="mt-10 grid gap-6 lg:grid-cols-[1fr_0.8fr]">
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <BookOpen className="h-5 w-5" style={{ color: primary }} />
-                About {tenant.name}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm leading-7 text-slate-600">
-              <p>{tenant.about}</p>
-              <p>
-                This homepage is designed to act as a public school front door, while the login area handles
-                attendance, grades, announcements, and role-based access for your school community.
-              </p>
-              {tenant.website && (
-                <p className="text-slate-500">
-                  Website: <span className="font-medium text-slate-900">{tenant.website}</span>
-                </p>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Users className="h-5 w-5" style={{ color: primary }} />
-                School Levels
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {schoolLevels.map((level) => (
-                <div key={level} className="flex items-center gap-3 rounded-lg border bg-white px-4 py-3">
-                  <CircleCheckBig className="h-4 w-4" style={{ color: accent }} />
-                  <span className="text-sm font-medium text-slate-700">{level}</span>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="mt-10 grid gap-6 lg:grid-cols-3">
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Users className="h-5 w-5" style={{ color: primary }} />
-                Student Services
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm leading-7 text-slate-600">
-              View records, check schedules, and track student progress from a single school portal.
-            </CardContent>
-          </Card>
-
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <ShieldCheck className="h-5 w-5" style={{ color: primary }} />
-                Secure Access
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm leading-7 text-slate-600">
-              Dedicated school subdomain with role-based access for staff, parents, students, and admin users.
-            </CardContent>
-          </Card>
-
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <GraduationCap className="h-5 w-5" style={{ color: accent }} />
-                Daily Updates
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm leading-7 text-slate-600">
-              Stay informed with announcements, attendance, and academic updates tailored to your school.
-            </CardContent>
-          </Card>
-        </section>
-
-        <section className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]" id="contact">
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle>Contact the School</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm text-slate-600">
-              <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4" style={{ color: primary }} />
-                <div>
-                  <p className="font-medium text-slate-900">Address</p>
-                  <p>{tenant.address || "Not configured yet"}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Phone className="mt-0.5 h-4 w-4" style={{ color: primary }} />
-                <div>
-                  <p className="font-medium text-slate-900">Phone</p>
-                  <p>{tenant.phone || "Not configured yet"}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-4 w-4" style={{ color: primary }} />
-                <div>
-                  <p className="font-medium text-slate-900">Email</p>
-                  <p>{tenant.email || "Not configured yet"}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Clock3 className="mt-0.5 h-4 w-4" style={{ color: primary }} />
-                <div>
-                  <p className="font-medium text-slate-900">Office Hours</p>
-                  <p>{tenant.officeHours || "Not configured yet"}</p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                <Button onClick={onLogin} style={{ backgroundColor: secondary }}>
-                  Login to Portal
-                </Button>
-                {tenant.email && (
-                  <Button variant="outline" asChild>
-                    <a href={`mailto:${tenant.email}`}>Email School</a>
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-none shadow-sm">
-            <CardHeader>
-              <CardTitle>What Visitors Can Find Here</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {highlights.map((item) => (
-                <div key={item} className="flex items-start gap-3 rounded-lg border bg-white px-4 py-3">
-                  <CircleCheckBig className="mt-0.5 h-4 w-4 flex-none" style={{ color: accent }} />
-                  <p className="text-sm leading-6 text-slate-700">{item}</p>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+              <Card className="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+                <CardHeader className="pb-4">
+                  <CardTitle>Google Maps</CardTitle>
+                  <CardDescription>School location preview</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <iframe
+                    title={`${tenant.name} map`}
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(tenant.address || content.contact.mapQuery)}&output=embed`}
+                    className="h-80 w-full border-0"
+                    loading="lazy"
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </section>
       </main>
+
+      <footer className="border-t bg-slate-950 text-slate-200">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[1fr_auto_auto] lg:px-6">
+          <div>
+            <div className="flex items-center gap-3">
+              {tenant.logo ? (
+                <img src={tenant.logo} alt={`${tenant.name} logo`} className="h-10 w-10 object-contain" />
+              ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-sm font-bold text-slate-950">
+                  SC
+                </div>
+              )}
+              <div>
+                <p className="text-sm font-bold text-white">{tenant.name}</p>
+                <p className="text-xs text-slate-400">{tenant.tagline || "School domain"}</p>
+              </div>
+            </div>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-slate-400">
+              {tenant.about || content.about.history}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Quick Links</p>
+            <div className="mt-4 grid gap-2 text-sm">
+              {content.footer.quickLinks.map((link) => (
+                <a key={link.label} href={link.href} className="text-slate-300 transition-colors hover:text-white">
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Contact</p>
+            <div className="mt-4 space-y-2 text-sm text-slate-300">
+              <p>{tenant.address || content.contact.address}</p>
+              <p>{tenant.phone || content.contact.phone}</p>
+              <p>{tenant.email || content.contact.email}</p>
+            </div>
+            <p className="mt-4 text-xs text-slate-500">
+              Copyright {new Date().getFullYear()} {tenant.name}
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

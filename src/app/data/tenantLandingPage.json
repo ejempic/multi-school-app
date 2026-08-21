@@ -1,0 +1,629 @@
+{
+  "default": {
+    "navigation": [
+      { "label": "Home", "href": "#home" },
+      { "label": "About", "href": "#about" },
+      { "label": "Programs", "href": "#programs" },
+      { "label": "Admissions", "href": "#admissions" },
+      { "label": "News", "href": "#news" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "hero": {
+      "eyebrow": "School homepage and portal access",
+      "headline": "Welcome to {schoolName}",
+      "tagline": "A clear public face for your school, with portal access one click away.",
+      "intro": "This page presents the school, its programs, and the essentials families need before they visit or enroll.",
+      "primaryCta": "Enroll Now",
+      "secondaryCta": "Learn More",
+      "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1400&q=80",
+      "imageAlt": "Students walking on a school campus"
+    },
+    "about": {
+      "history": "Our school was built to create a steady, values-centered learning environment for children and families in the community.",
+      "mission": "To provide quality education that builds competence, character, and confidence.",
+      "vision": "To be a trusted school where learners grow in knowledge, discipline, and service.",
+      "coreValues": ["Excellence", "Integrity", "Respect", "Service", "Discipline"]
+    },
+    "programs": [
+      {
+        "level": "Preschool / Kindergarten",
+        "description": "A warm foundation for early learning, social growth, and school readiness."
+      },
+      {
+        "level": "Elementary",
+        "description": "Strong literacy, numeracy, and habits of learning for young students."
+      },
+      {
+        "level": "Junior High School",
+        "description": "A structured academic program with widening opportunities for growth."
+      },
+      {
+        "level": "Senior High School",
+        "description": "Career and college readiness through a more specialized senior curriculum."
+      },
+      {
+        "level": "College Programs",
+        "description": "Available where applicable, with degree pathways and skills-based study."
+      }
+    ],
+    "whyChooseUs": [
+      { "title": "Qualified teachers", "description": "Teachers who guide learning with structure and care." },
+      { "title": "Modern facilities", "description": "Learning spaces that support classes, labs, and student activities." },
+      { "title": "Quality education", "description": "Focused academic programs with clear outcomes." },
+      { "title": "Safe environment", "description": "A school culture that prioritizes student welfare." },
+      { "title": "Student activities", "description": "Programs that build confidence beyond the classroom." },
+      { "title": "Affordable tuition", "description": "Practical school access for families." }
+    ],
+    "statistics": [
+      { "label": "Students", "value": "1,200+", "detail": "Across all grade levels" },
+      { "label": "Teachers", "value": "80+", "detail": "Licensed and trained staff" },
+      { "label": "Years", "value": "20+", "detail": "Years of service" },
+      { "label": "Achievement", "value": "95%", "detail": "Average graduation success" }
+    ],
+    "facilities": [
+      { "title": "Classrooms", "description": "Light, ventilated learning rooms with reliable equipment." },
+      { "title": "Computer laboratory", "description": "Hands-on digital learning and research support." },
+      { "title": "Science laboratory", "description": "Practical experiments and inquiry-based learning." },
+      { "title": "Library", "description": "Reading and reference space for independent study." },
+      { "title": "Gym / sports facilities", "description": "Indoor and outdoor areas for training and fitness." },
+      { "title": "Cafeteria", "description": "A clean space for meals and student breaks." }
+    ],
+    "news": [
+      {
+        "date": "Enrollment season",
+        "title": "Enrollment is now open",
+        "category": "Admissions",
+        "summary": "Submit requirements early to reserve a place for the next term."
+      },
+      {
+        "date": "This month",
+        "title": "School events calendar",
+        "category": "Events",
+        "summary": "Check upcoming activities, assemblies, and special programs."
+      },
+      {
+        "date": "Holiday notice",
+        "title": "Office closure reminders",
+        "category": "Calendar",
+        "summary": "Follow official schedule updates for holidays and class suspensions."
+      },
+      {
+        "date": "Exams",
+        "title": "Exam schedules posted",
+        "category": "Academics",
+        "summary": "Families can review the assessment schedule ahead of each grading period."
+      }
+    ],
+    "admissions": {
+      "requirements": [
+        "Completed admission form",
+        "Birth certificate or school record",
+        "Recent ID photo",
+        "Report card or transfer credential"
+      ],
+      "process": [
+        "Submit your application online or at the office.",
+        "Review documents and confirm enrollment slot.",
+        "Complete payment and receive class assignment."
+      ],
+      "dates": "Enrollment dates are published each school year and updated on this page.",
+      "cta": "Apply Now"
+    },
+    "gallery": [
+      {
+        "title": "Campus life",
+        "caption": "Daily movement through shared learning spaces.",
+        "imageUrl": "https://images.unsplash.com/photo-1498079022511-d15614cb1c02?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Classroom activities",
+        "caption": "Students engaged in guided instruction.",
+        "imageUrl": "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Events and programs",
+        "caption": "School gatherings that build community.",
+        "imageUrl": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Laboratory work",
+        "caption": "Practical learning in science and computing.",
+        "imageUrl": "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Sports and movement",
+        "caption": "Healthy activity beyond the classroom.",
+        "imageUrl": "https://images.unsplash.com/photo-1517935706615-2717063c2225?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Library and study",
+        "caption": "Quiet study spaces for focus and reading.",
+        "imageUrl": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Student Parent",
+        "role": "Parent testimonial",
+        "quote": "The school keeps us informed, and the teachers are easy to work with."
+      },
+      {
+        "name": "Senior Student",
+        "role": "Student testimonial",
+        "quote": "I can check updates quickly, and the school feels organized."
+      },
+      {
+        "name": "Alumni Voice",
+        "role": "Alumni testimonial",
+        "quote": "The routines and values I learned here helped me in college."
+      }
+    ],
+    "contact": {
+      "address": "School campus address goes here",
+      "phone": "+63 900 000 0000",
+      "email": "info@schooldomain.edu.ph",
+      "officeHours": "Monday to Friday, 8:00 AM to 5:00 PM",
+      "mapQuery": "School campus address goes here",
+      "socialLinks": [
+        { "label": "Facebook", "href": "#" },
+        { "label": "Instagram", "href": "#" },
+        { "label": "YouTube", "href": "#" }
+      ]
+    },
+    "footer": {
+      "quickLinks": [
+        { "label": "About", "href": "#about" },
+        { "label": "Programs", "href": "#programs" },
+        { "label": "Admissions", "href": "#admissions" },
+        { "label": "Contact", "href": "#contact" }
+      ]
+    }
+  },
+  "gtwfsl": {
+    "hero": {
+      "eyebrow": "Faith-centered learning for growing learners",
+      "headline": "Global Two Wings Foundation School of Legazpi",
+      "tagline": "Where academic excellence meets character formation.",
+      "intro": "We provide a structured, values-driven learning environment for learners who are growing in knowledge, discipline, and service.",
+      "primaryCta": "Enroll Now",
+      "secondaryCta": "Learn More",
+      "imageUrl": "https://images.unsplash.com/photo-1517037300058-b0f17cd1f5ff?auto=format&fit=crop&w=1400&q=80",
+      "imageAlt": "Students in a classroom"
+    },
+    "about": {
+      "history": "Global Two Wings Foundation School of Legazpi was established to serve families with quality Christian education and a clear academic pathway.",
+      "mission": "To provide quality Christian education that develops learners academically, spiritually, and socially.",
+      "vision": "To be a school that forms responsible, capable, and Christ-centered learners for the future.",
+      "coreValues": ["Faith", "Integrity", "Excellence", "Service", "Compassion"]
+    },
+    "programs": [
+      {
+        "level": "Preschool / Kindergarten",
+        "description": "Early learning that builds curiosity, language, and routines."
+      },
+      {
+        "level": "Elementary",
+        "description": "Strong foundations in literacy, numeracy, and foundational values."
+      },
+      {
+        "level": "Junior High School",
+        "description": "Structured subject learning with formation and support."
+      },
+      {
+        "level": "Senior High School",
+        "description": "Academic readiness for college and future service."
+      }
+    ],
+    "whyChooseUs": [
+      { "title": "Qualified teachers", "description": "Teachers who guide learning and formation." },
+      { "title": "Modern facilities", "description": "Campus spaces that support teaching and student care." },
+      { "title": "Quality education", "description": "A program built around academic and values formation." },
+      { "title": "Safe learning environment", "description": "Students learn in a supervised, welcoming school culture." },
+      { "title": "Student activities", "description": "Activities that reinforce leadership and service." },
+      { "title": "Affordable tuition", "description": "A practical path for families seeking strong schooling." }
+    ],
+    "statistics": [
+      { "label": "Students", "value": "1,250+", "detail": "Active learners on campus" },
+      { "label": "Teachers", "value": "85+", "detail": "Faculty and support staff" },
+      { "label": "Years", "value": "20+", "detail": "Years of faithful service" },
+      { "label": "Graduation", "value": "95%", "detail": "Students completing each cycle" }
+    ],
+    "facilities": [
+      { "title": "Classrooms", "description": "Well-managed classrooms for regular instruction." },
+      { "title": "Computer laboratory", "description": "Digital literacy and technology practice." },
+      { "title": "Science laboratory", "description": "Hands-on science learning and experiments." },
+      { "title": "Library", "description": "Reference books, study areas, and reading space." },
+      { "title": "Gym / sports facilities", "description": "Spaces for games, fitness, and school events." },
+      { "title": "Cafeteria", "description": "A practical break area for meals and student comfort." }
+    ],
+    "news": [
+      {
+        "date": "Enrollment open",
+        "title": "Enrollment schedule posted",
+        "category": "Admissions",
+        "summary": "Families can now submit requirements for the coming school year."
+      },
+      {
+        "date": "Weekly update",
+        "title": "Campus events and reminders",
+        "category": "Events",
+        "summary": "Follow scheduled activities, meetings, and school notices."
+      },
+      {
+        "date": "Holiday advisory",
+        "title": "Office and class suspension notices",
+        "category": "Calendar",
+        "summary": "Track closures and special schedules in one place."
+      },
+      {
+        "date": "Recognition",
+        "title": "Recent student achievements",
+        "category": "Awards",
+        "summary": "Celebrate academic and extracurricular milestones."
+      }
+    ],
+    "admissions": {
+      "requirements": [
+        "Completed admission form",
+        "Birth certificate",
+        "Recent ID photo",
+        "Latest report card"
+      ],
+      "process": [
+        "Prepare the required documents.",
+        "Submit the application at the admissions desk.",
+        "Confirm enrollment and release class details."
+      ],
+      "dates": "Admission dates are posted before the school year opens.",
+      "cta": "Apply Now"
+    },
+    "gallery": [
+      {
+        "title": "Campus life",
+        "caption": "A bright and active school environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Learning spaces",
+        "caption": "Students in guided classroom discussion.",
+        "imageUrl": "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Events",
+        "caption": "School gatherings and celebrations.",
+        "imageUrl": "https://images.unsplash.com/photo-1485206412256-701ccc5b93ca?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Science and labs",
+        "caption": "Hands-on learning in practical subjects.",
+        "imageUrl": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Sports activities",
+        "caption": "Healthy movement and team building.",
+        "imageUrl": "https://images.unsplash.com/photo-1547347298-4074fc3086f0?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Study and reading",
+        "caption": "Quiet spaces for focused learning.",
+        "imageUrl": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Grade 12 Parent",
+        "role": "Parent testimonial",
+        "quote": "The school gives us clear communication and a strong sense of direction."
+      },
+      {
+        "name": "Junior High Student",
+        "role": "Student testimonial",
+        "quote": "It feels organized, and it is easy to keep up with announcements."
+      },
+      {
+        "name": "Alumni",
+        "role": "Alumni testimonial",
+        "quote": "The values I learned here continue to guide me."
+      }
+    ],
+    "contact": {
+      "address": "Legazpi City, Albay, Philippines",
+      "phone": "+63 900 000 0001",
+      "email": "info@gtwfsl.eskuwela.ph",
+      "officeHours": "Monday to Friday, 8:00 AM to 5:00 PM",
+      "mapQuery": "Legazpi City, Albay, Philippines",
+      "socialLinks": [
+        { "label": "Facebook", "href": "#" },
+        { "label": "Instagram", "href": "#" },
+        { "label": "YouTube", "href": "#" }
+      ]
+    },
+    "footer": {
+      "quickLinks": [
+        { "label": "About", "href": "#about" },
+        { "label": "Programs", "href": "#programs" },
+        { "label": "Admissions", "href": "#admissions" },
+        { "label": "Contact", "href": "#contact" }
+      ]
+    }
+  },
+  "saa": {
+    "hero": {
+      "eyebrow": "A school homepage for families, students, and visitors",
+      "headline": "Saint Agnes Academy",
+      "tagline": "Clear information for enrollment, learning, and school life.",
+      "intro": "We present the school publicly with a simple path to enrollment and the latest campus information families need.",
+      "primaryCta": "Enroll Now",
+      "secondaryCta": "Learn More",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1400&q=80",
+      "imageAlt": "Students in a school courtyard"
+    },
+    "about": {
+      "history": "Saint Agnes Academy serves the community with a steady, family-friendly learning environment.",
+      "mission": "To form learners who are competent, compassionate, and ready to contribute to society.",
+      "vision": "To be a trusted school that supports academic growth and good character.",
+      "coreValues": ["Compassion", "Respect", "Responsibility", "Excellence", "Service"]
+    },
+    "programs": [
+      {
+        "level": "Preschool / Kindergarten",
+        "description": "A caring start for early learners and growing routines."
+      },
+      {
+        "level": "Elementary",
+        "description": "Strong foundation for core academics and school habits."
+      },
+      {
+        "level": "Junior High School",
+        "description": "Structured learning for advancing students."
+      }
+    ],
+    "whyChooseUs": [
+      { "title": "Qualified teachers", "description": "Teachers who guide students with consistency." },
+      { "title": "Modern facilities", "description": "Functional spaces for classes and activities." },
+      { "title": "Quality education", "description": "Clear instruction and organized support." },
+      { "title": "Safe learning environment", "description": "A school atmosphere families can trust." },
+      { "title": "Student activities", "description": "Clubs and events that help students grow." },
+      { "title": "Affordable tuition", "description": "A practical option for local families." }
+    ],
+    "statistics": [
+      { "label": "Students", "value": "900+", "detail": "Across main grade levels" },
+      { "label": "Teachers", "value": "60+", "detail": "Teaching and support staff" },
+      { "label": "Years", "value": "15+", "detail": "Years of community service" },
+      { "label": "Achievement", "value": "92%", "detail": "Graduation and progression rate" }
+    ],
+    "facilities": [
+      { "title": "Classrooms", "description": "Practical spaces for daily instruction." },
+      { "title": "Computer laboratory", "description": "Technology learning and research support." },
+      { "title": "Science laboratory", "description": "Experiments and hands-on discovery." },
+      { "title": "Library", "description": "Reading, research, and quiet study." },
+      { "title": "Gym / sports facilities", "description": "Space for sports and student events." },
+      { "title": "Cafeteria", "description": "Simple meals and break-time comfort." }
+    ],
+    "news": [
+      {
+        "date": "Enrollment open",
+        "title": "Enrollment dates are available",
+        "category": "Admissions",
+        "summary": "Families can begin the application process now."
+      },
+      {
+        "date": "Events",
+        "title": "Upcoming school activities",
+        "category": "Community",
+        "summary": "Track assemblies, performances, and classroom events."
+      },
+      {
+        "date": "Advisory",
+        "title": "Holiday and exam schedules",
+        "category": "Calendar",
+        "summary": "See official updates in one place."
+      },
+      {
+        "date": "Recognition",
+        "title": "Student achievements",
+        "category": "Awards",
+        "summary": "Celebrate recent accomplishments and honors."
+      }
+    ],
+    "admissions": {
+      "requirements": [
+        "Completed admission form",
+        "Birth certificate or PSA copy",
+        "Recent ID photo",
+        "Latest report card"
+      ],
+      "process": [
+        "Submit the requirements.",
+        "Wait for verification and slot confirmation.",
+        "Complete enrollment and receive class details."
+      ],
+      "dates": "Enrollment dates are posted before the next term opens.",
+      "cta": "Apply Now"
+    },
+    "gallery": [
+      {
+        "title": "Campus life",
+        "caption": "Students and staff in daily school activity.",
+        "imageUrl": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Classroom learning",
+        "caption": "Students paying attention in class.",
+        "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Events",
+        "caption": "Shared moments from school programs.",
+        "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Laboratory work",
+        "caption": "Practical exercises and discovery.",
+        "imageUrl": "https://images.unsplash.com/photo-1581093806997-124204d9fa9d?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Sports",
+        "caption": "Healthy movement and activities.",
+        "imageUrl": "https://images.unsplash.com/photo-1511886929837-354d5b2f7a5e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Library",
+        "caption": "Quiet reading and study areas.",
+        "imageUrl": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Parent",
+        "role": "Parent testimonial",
+        "quote": "The page makes it easy to check what is happening at school."
+      },
+      {
+        "name": "Student",
+        "role": "Student testimonial",
+        "quote": "Everything is easy to find, from announcements to contact details."
+      },
+      {
+        "name": "Alumni",
+        "role": "Alumni testimonial",
+        "quote": "The school gave me structure and confidence."
+      }
+    ],
+    "contact": {
+      "address": "Legazpi City, Albay, Philippines",
+      "phone": "+63 900 000 0002",
+      "email": "office@saa.eskuwela.ph",
+      "officeHours": "Monday to Friday, 8:00 AM to 4:30 PM",
+      "mapQuery": "Legazpi City, Albay, Philippines",
+      "socialLinks": [
+        { "label": "Facebook", "href": "#" },
+        { "label": "Instagram", "href": "#" },
+        { "label": "YouTube", "href": "#" }
+      ]
+    },
+    "footer": {
+      "quickLinks": [
+        { "label": "About", "href": "#about" },
+        { "label": "Programs", "href": "#programs" },
+        { "label": "Admissions", "href": "#admissions" },
+        { "label": "Contact", "href": "#contact" }
+      ]
+    }
+  },
+  "admin": {
+    "hero": {
+      "eyebrow": "Platform administration",
+      "headline": "SchoolApp Platform",
+      "tagline": "A shared public homepage for each tenant, with portal access behind login.",
+      "intro": "This page is driven by JSON so every school can reuse the same structure while keeping its own content.",
+      "primaryCta": "Open Portal",
+      "secondaryCta": "Learn More",
+      "imageUrl": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80",
+      "imageAlt": "School administrators reviewing a dashboard"
+    },
+    "about": {
+      "history": "The platform centralizes school landing pages and student systems in one place.",
+      "mission": "To help schools present their public site and portal access through one managed system.",
+      "vision": "To make each school site easy to update, consistent, and permission-aware.",
+      "coreValues": ["Clarity", "Consistency", "Security", "Control", "Maintainability"]
+    },
+    "programs": [
+      {
+        "level": "Tenant landing pages",
+        "description": "One public page template for every school."
+      },
+      {
+        "level": "Portal access",
+        "description": "Role-based login for staff, parents, and students."
+      },
+      {
+        "level": "School operations",
+        "description": "Academic, attendance, and communication modules."
+      }
+    ],
+    "whyChooseUs": [
+      { "title": "Permission-aware", "description": "Content can later be gated by school role or admin approval." },
+      { "title": "JSON-backed", "description": "Landing page content is stored in one structured source." },
+      { "title": "Reusable layout", "description": "All schools share the same public structure." },
+      { "title": "Easy updates", "description": "Content changes do not require page rewrites." }
+    ],
+    "statistics": [
+      { "label": "Tenants", "value": "2+", "detail": "Configured school sites" },
+      { "label": "Pages", "value": "1", "detail": "Reusable landing template" },
+      { "label": "Updates", "value": "JSON", "detail": "Structured content source" },
+      { "label": "Access", "value": "Role-based", "detail": "Permission ready" }
+    ],
+    "facilities": [
+      { "title": "Content control", "description": "Centralized management of landing page sections." },
+      { "title": "School branding", "description": "Logo, theme, and message per tenant." },
+      { "title": "Admission pipeline", "description": "Public inquiry flow for each school." },
+      { "title": "Communication", "description": "Announcements, contacts, and updates." }
+    ],
+    "news": [
+      {
+        "date": "System update",
+        "title": "Tenant landing content is JSON-backed",
+        "category": "Platform",
+        "summary": "Each school can reuse the same page structure with different content."
+      }
+    ],
+    "admissions": {
+      "requirements": [
+        "Define the tenant content entry",
+        "Upload school logo and images",
+        "Populate admissions and contact details"
+      ],
+      "process": [
+        "Select the school tenant.",
+        "Update the JSON content entry.",
+        "Publish the landing page."
+      ],
+      "dates": "Admin-managed by policy.",
+      "cta": "Manage Content"
+    },
+    "gallery": [
+      {
+        "title": "Dashboard",
+        "caption": "Internal management view.",
+        "imageUrl": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "Content entry",
+        "caption": "Structured school data management.",
+        "imageUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "title": "School site",
+        "caption": "A public page for each tenant.",
+        "imageUrl": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Admin",
+        "role": "Platform operator",
+        "quote": "One page structure, many schools, less duplication."
+      }
+    ],
+    "contact": {
+      "address": "Platform operations",
+      "phone": "+63 900 000 0000",
+      "email": "admin@eskuwela.ph",
+      "officeHours": "Monday to Friday, 8:00 AM to 5:00 PM",
+      "mapQuery": "Legazpi City, Albay, Philippines",
+      "socialLinks": [
+        { "label": "Facebook", "href": "#" },
+        { "label": "GitHub", "href": "#" }
+      ]
+    },
+    "footer": {
+      "quickLinks": [
+        { "label": "About", "href": "#about" },
+        { "label": "Programs", "href": "#programs" },
+        { "label": "Admissions", "href": "#admissions" },
+        { "label": "Contact", "href": "#contact" }
+      ]
+    }
+  }
+}
