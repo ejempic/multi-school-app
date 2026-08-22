@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/app/components/ui/dialog";
-import { Barcode, Check, LogOut, Lock, User, ChevronDown, Settings, BookOpen, Award, Zap, Star, Heart, GraduationCap, Lightbulb, ArrowLeft } from "lucide-react";
+import { Barcode, Check, LogOut, Lock, User, ChevronDown, Settings, BookOpen, Award, Zap, Star, Heart, GraduationCap, Lightbulb, ArrowLeft, X } from "lucide-react";
 import { showSuccessToast, showErrorToast } from "@/app/utils/toastNotification";
 import { useTenant } from "@/app/contexts/TenantContext";
 
@@ -93,6 +93,7 @@ export function StudentScanner() {
   const [selectedLogo, setSelectedLogo] = useState<typeof BookOpen>(BookOpen);
   const [colorOpacity, setColorOpacity] = useState(100);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showDemoBubble, setShowDemoBubble] = useState(true);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -162,14 +163,16 @@ export function StudentScanner() {
     }
   };
 
-  const handleIdScan = () => {
-    if (!idInput.trim()) {
+  const handleIdScan = (sampleId?: string) => {
+    const scannedId = sampleId ?? idInput;
+
+    if (!scannedId.trim()) {
       return;
     }
 
-    const student = students.find(s => s.id.toLowerCase() === idInput.toLowerCase());
+    const student = students.find(s => s.id.toLowerCase() === scannedId.toLowerCase());
     if (!student) {
-      showErrorToast("Student Not Found", `No student found with ID: ${idInput}`);
+      showErrorToast("Student Not Found", `No student found with ID: ${scannedId}`);
       setIdInput("");
       return;
     }
@@ -538,7 +541,7 @@ export function StudentScanner() {
                 </div>
 
                 {/* Scanner Input */}
-                <div className="w-full max-w-sm">
+                <div className="relative w-full max-w-sm">
                   <Input
                     ref={inputRef}
                     placeholder="Scan Student ID"
@@ -548,6 +551,55 @@ export function StudentScanner() {
                     autoFocus
                     className="text-center text-lg font-semibold py-3 border-2 h-12 sm:h-14"
                   />
+
+                  <div className="mt-4 rounded-lg border border-dashed border-blue-200 bg-blue-50/60 p-3">
+                    <p className="mb-2 text-center text-xs font-bold uppercase tracking-wide text-blue-700">
+                      Temporary sample student IDs
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {students.map((student) => (
+                        <button
+                          key={student.id}
+                          type="button"
+                          onClick={() => handleIdScan(student.id)}
+                          className="rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs font-semibold text-blue-700 shadow-sm transition-colors hover:bg-blue-100"
+                          title={`${student.name} - ${student.className}`}
+                        >
+                          {student.id}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {showDemoBubble && (
+                    <div className="relative mt-4">
+                      <div className="relative rounded-xl border border-blue-100 bg-white p-4 text-left shadow-lg">
+                        <button
+                          type="button"
+                          onClick={() => setShowDemoBubble(false)}
+                          className="absolute right-3 top-3 rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                          aria-label="Close demo information"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+
+                        <div className="pr-8">
+                          <p className="text-sm font-bold text-slate-900">Demo gate setup</p>
+                          <p className="mt-1 text-xs font-medium text-slate-500">Flexible hardware for real school entrances.</p>
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-slate-600">
+                          Run this scanner on a laptop, compact mini computer, or kiosk at the school gate with a QR scanner or RFID reader. Each scan creates a real-time arrival and exit record, helping staff monitor gate activity while parents receive timely alerts when their student safely arrives on campus or leaves for the day.
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {["Laptop ready", "Mini PC kiosk", "QR scan", "RFID tap", "Parent alerts"].map((feature) => (
+                            <span key={feature} className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

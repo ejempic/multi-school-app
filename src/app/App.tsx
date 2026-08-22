@@ -16,6 +16,7 @@ import { TeacherDashboard } from "./pages/dashboard/TeacherDashboard";
 import { StudentDashboard } from "./pages/dashboard/StudentDashboard";
 import { ParentControls } from "./pages/management/ParentControls";
 import { TeacherControls } from "./pages/management/TeacherControls";
+import { CashierWorkspace } from "./pages/management/CashierWorkspace";
 import { Attendance } from "./pages/academic/Attendance";
 import { StudentScanner } from "./pages/tools/StudentScanner";
 import { Phases } from "./pages/academic/Phases";
@@ -25,7 +26,9 @@ import { BehaviorManager } from "./pages/academic/BehaviorManager";
 import { TenantManagement } from "./pages/platform/TenantManagement";
 import { PlanManagement } from "./pages/platform/PlanManagement";
 import { ClinicManagement } from "./pages/management/ClinicManagement";
+import { Books } from "./pages/management/Books";
 import { LibraryManagement } from "./pages/management/LibraryManagement";
+import { Uniforms } from "./pages/management/Uniforms";
 import { Settings as SettingsComponent } from "./pages/platform/Settings";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
@@ -48,6 +51,8 @@ import {
   Award,
   Activity,
   Library,
+  Receipt,
+  Shirt,
 } from "lucide-react";
 
 // Helper to check brightness
@@ -70,8 +75,8 @@ const getContrastDetails = (hexColor?: string) => {
   };
 };
 
-type View = "dashboard" | "students" | "classes" | "grades" | "tuitions" | "announcements" | "calendar" | "parents" | "staff" | "attendance" | "phases" | "pace-management" | "sick-leaves" | "behavior" | "tenants" | "plans" | "clinic" | "library" | "settings";
-type UserRole = "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | null;
+type View = "dashboard" | "students" | "classes" | "grades" | "tuitions" | "announcements" | "calendar" | "parents" | "staff" | "attendance" | "phases" | "pace-management" | "sick-leaves" | "behavior" | "tenants" | "plans" | "clinic" | "books" | "library" | "uniforms" | "cashier" | "settings";
+type UserRole = "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | "registrar" | "cashier" | null;
 
 interface UserData {
   name: string;
@@ -146,7 +151,7 @@ export default function App() {
     }
 
     const items = [
-      { id: "dashboard" as View, label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "teacher", "parent", "student", "nurse", "librarian"], category: "OVERVIEW" },
+      { id: "dashboard" as View, label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "teacher", "parent", "student", "nurse", "librarian", "registrar", "cashier"], category: "OVERVIEW" },
       
       // Communications
       { id: "announcements" as View, label: "Announcements", icon: Bell, roles: ["admin", "teacher", "parent", "student", "nurse", "librarian"], category: "COMMUNICATION" },
@@ -159,14 +164,17 @@ export default function App() {
       { id: "behavior" as View, label: "Merits & Demerits", icon: Award, roles: ["admin", "teacher", "parent"], category: "ACADEMICS" },
       
       // Management
-      { id: "students" as View, label: "Students", icon: Users, roles: ["admin", "teacher"], category: "MANAGEMENT" },
+      { id: "students" as View, label: "Students", icon: Users, roles: ["admin", "teacher", "registrar", "cashier"], category: "MANAGEMENT" },
       { id: "classes" as View, label: "Classes", icon: BookOpen, roles: ["admin", "teacher"], category: "MANAGEMENT" },
-      { id: "tuitions" as View, label: "Tuitions", icon: DollarSign, roles: ["admin"], category: "MANAGEMENT" },
+      { id: "tuitions" as View, label: "Tuitions", icon: DollarSign, roles: ["admin", "registrar", "cashier"], category: "MANAGEMENT" },
+      { id: "cashier" as View, label: "Cashier", icon: Receipt, roles: ["admin", "cashier"], category: "MANAGEMENT" },
+      { id: "books" as View, label: "Books", icon: BookOpen, roles: ["admin", "registrar", "cashier"], category: "MANAGEMENT" },
+      { id: "uniforms" as View, label: "Uniforms", icon: Shirt, roles: ["admin", "registrar", "cashier"], category: "MANAGEMENT" },
       { id: "staff" as View, label: "School Staff", icon: BookOpen, roles: ["admin"], category: "MANAGEMENT" },
       { id: "sick-leaves" as View, label: "Sick Leaves", icon: Stethoscope, roles: ["admin", "teacher", "parent"], category: "MANAGEMENT" },
       
       // Admin / Config
-      { id: "parents" as View, label: "Parent Accounts", icon: Users, roles: ["admin"], category: "ADMINISTRATION" },
+      { id: "parents" as View, label: "Parent Accounts", icon: Users, roles: ["admin", "registrar", "cashier"], category: "ADMINISTRATION" },
       { id: "pace-management" as View, label: "PACE Config", icon: Settings, roles: ["admin", "teacher", "parent"], category: "ADMINISTRATION" },
       { id: "settings" as View, label: "School Settings", icon: Settings, roles: ["admin"], category: "ADMINISTRATION" },
     ];
@@ -177,7 +185,7 @@ export default function App() {
     }
 
     if (currentTenant?.features?.includes("Library Management")) {
-      items.push({ id: "library" as View, label: "Library", icon: Library, roles: ["admin"], category: "MANAGEMENT" });
+      items.push({ id: "library" as View, label: "Library", icon: Library, roles: ["admin", "librarian"], category: "MANAGEMENT" });
     }
 
     return items.filter(item => 
@@ -206,6 +214,10 @@ export default function App() {
         return <LibraryManagement />;
     }
 
+    if (userRole === "cashier" && currentView === "dashboard") {
+        return <CashierWorkspace />;
+    }
+
     switch (currentView) {
       case "dashboard":
         if (currentTenant?.id === 'admin') return <TenantManagement />;
@@ -232,8 +244,14 @@ export default function App() {
         return <Phases userRole={userRole} userData={userData} onNavigate={setCurrentView} />;
       case "clinic":
         return <ClinicManagement />;
+      case "books":
+        return <Books />;
       case "library":
         return <LibraryManagement />;
+      case "uniforms":
+        return <Uniforms />;
+      case "cashier":
+        return <CashierWorkspace />;
       case "pace-management":
         return <PaceManagement />;
       case "sick-leaves":

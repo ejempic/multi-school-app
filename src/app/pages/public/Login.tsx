@@ -8,7 +8,7 @@ import { GraduationCap, Barcode } from "lucide-react";
 import { useTenant } from "@/app/contexts/TenantContext";
 
 interface LoginProps {
-  onLogin: (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian", userData: any) => void;
+  onLogin: (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | "registrar" | "cashier", userData: any) => void;
   onNavigateToScanner?: () => void;
 }
 
@@ -17,7 +17,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
   const [password, setPassword] = useState("");
   const { currentTenant } = useTenant();
 
-  const handleLogin = (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian") => {
+  const handleLogin = (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | "registrar" | "cashier") => {
     // Mock login - in a real app, this would validate credentials
     const mockUsers = {
       admin: {
@@ -52,6 +52,18 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
         name: "Madam Pinta",
         username: "librarian",
         role: "librarian",
+      },
+      registrar: {
+        name: "Registrar User",
+        username: "registrar",
+        role: "registrar",
+        department: "Records and Enrollment",
+      },
+      cashier: {
+        name: "Cashier User",
+        username: "cashier",
+        role: "cashier",
+        department: "Finance Office",
       },
     };
 
@@ -97,6 +109,9 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
 
         <Card>
           <CardHeader>
+            <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm font-extrabold uppercase tracking-wide text-amber-800">
+              THIS IS FOR DEMO PURPOSES
+            </div>
             <CardTitle>Login</CardTitle>
             <CardDescription>{currentTenant ? `Sign in to ${currentTenant.name}` : "Sign in to your account"}</CardDescription>
           </CardHeader>
@@ -109,22 +124,30 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
 
             <Tabs defaultValue="admin" className="w-full">
               {currentTenant?.id === 'admin' ? (
-                <TabsList className="grid w-full grid-cols-1">
-                   <TabsTrigger value="admin">Platform Administrator</TabsTrigger>
-                </TabsList>
+                <div className="rounded-lg bg-slate-100 p-3">
+                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Please select a login type to test</p>
+                  <TabsList className="grid w-full grid-cols-1 bg-transparent p-0">
+                     <TabsTrigger value="admin" className="h-10 rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Platform Administrator</TabsTrigger>
+                  </TabsList>
+                </div>
               ) : (
-                <TabsList className="flex flex-wrap h-auto gap-1">
-                    <TabsTrigger value="admin" className="flex-1">Admin</TabsTrigger>
-                    <TabsTrigger value="teacher" className="flex-1">Teacher</TabsTrigger>
-                    <TabsTrigger value="parent" className="flex-1">Parent</TabsTrigger>
-                    <TabsTrigger value="student" className="flex-1">Student</TabsTrigger>
-                    {currentTenant?.features?.includes("Clinic Management") && (
-                        <TabsTrigger value="nurse" className="flex-1">Clinic</TabsTrigger>
-                    )}
-                    {currentTenant?.features?.includes("Library Management") && (
-                        <TabsTrigger value="librarian" className="flex-1">Library</TabsTrigger>
-                    )}
-                </TabsList>
+                <div className="rounded-lg bg-slate-100 p-3">
+                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">Please select a login type to test</p>
+                  <TabsList className="flex h-auto w-full flex-wrap justify-center gap-2 bg-transparent p-0">
+                      <TabsTrigger value="admin" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">School Admin</TabsTrigger>
+                      <TabsTrigger value="teacher" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Teacher</TabsTrigger>
+                      <TabsTrigger value="parent" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Parent</TabsTrigger>
+                      <TabsTrigger value="student" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Student</TabsTrigger>
+                      <TabsTrigger value="registrar" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Registrar</TabsTrigger>
+                      <TabsTrigger value="cashier" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Cashier</TabsTrigger>
+                      {currentTenant?.features?.includes("Clinic Management") && (
+                          <TabsTrigger value="nurse" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Clinic</TabsTrigger>
+                      )}
+                      {currentTenant?.features?.includes("Library Management") && (
+                          <TabsTrigger value="librarian" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Library</TabsTrigger>
+                      )}
+                  </TabsList>
+                </div>
               )}
 
               <TabsContent value="admin" className="space-y-4 mt-4">
@@ -150,10 +173,10 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                 </div>
                 
                 <Button className="w-full" onClick={() => handleLogin("admin")}>
-                  Login as Admin
+                  Login as School Admin
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
-                  Demo: Use any username/password
+                  Please continue without username and password for testing.
                 </p>
               </TabsContent>
 
@@ -182,7 +205,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                   Login as Teacher
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
-                  Demo: Use any username/password
+                  Please continue without username and password for testing.
                 </p>
               </TabsContent>
 
@@ -211,7 +234,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                   Login as Parent
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
-                  Demo: Use any username/password
+                  Please continue without username and password for testing.
                 </p>
               </TabsContent>
 
@@ -240,9 +263,68 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                   Login as Student
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
-                  Demo: Use any username/password
+                  Please continue without username and password for testing.
                 </p>
               </TabsContent>
+
+              <TabsContent value="registrar" className="space-y-4 mt-4">
+                <div>
+                  <Label htmlFor="registrar-username">Username</Label>
+                  <Input
+                    id="registrar-username"
+                    type="text"
+                    placeholder="registrar"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="registrar-password">Password</Label>
+                  <Input
+                    id="registrar-password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <Button className="w-full" onClick={() => handleLogin("registrar")}>
+                  Login as Registrar
+                </Button>
+                <p className="text-xs text-gray-500 text-center">
+                  Please continue without username and password for testing.
+                </p>
+              </TabsContent>
+
+              <TabsContent value="cashier" className="space-y-4 mt-4">
+                <div>
+                  <Label htmlFor="cashier-username">Username</Label>
+                  <Input
+                    id="cashier-username"
+                    type="text"
+                    placeholder="cashier"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="cashier-password">Password</Label>
+                  <Input
+                    id="cashier-password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <Button className="w-full" onClick={() => handleLogin("cashier")}>
+                  Login as Cashier
+                </Button>
+                <p className="text-xs text-gray-500 text-center">
+                  Please continue without username and password for testing.
+                </p>
+              </TabsContent>
+
               <TabsContent value="nurse" className="space-y-4 mt-4">
                 <div>
                   <Label htmlFor="nurse-username">Username</Label>
@@ -268,7 +350,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                   Login as Clinic Nurse
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
-                  Demo: Use any username/password
+                  Please continue without username and password for testing.
                 </p>
               </TabsContent>
 
@@ -297,7 +379,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                   Login as Librarian
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
-                  Demo: Use any username/password
+                  Please continue without username and password for testing.
                 </p>
               </TabsContent>
             </Tabs>
