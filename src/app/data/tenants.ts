@@ -23,7 +23,7 @@ export interface Tenant {
     accent?: string; // Optional accent color
     background?: string; // Optional background color
   };
-  plan?: "Basic" | "Pro" | "Enterprise";
+  plan?: "Sampaguita" | "Talisay" | "Yakal" | "Narra";
   features?: string[];
   currentSchoolYear?: string;
   currentTerm?: string;
@@ -59,7 +59,7 @@ export const tenants: Tenant[] = [
     ],
     currentSchoolYear: "SY 2025-2026",
     currentTerm: "2nd Semester",
-    plan: "Enterprise",
+    plan: "Narra",
     features: [
       "Student Database (SIS)",
       "Class Management",
@@ -109,10 +109,10 @@ export const tenants: Tenant[] = [
     ],
     heroStats: [
       { label: "Enrollment", value: "Open" },
-      { label: "Program", value: "Pro" },
+      { label: "Program", value: "Talisay" },
       { label: "Community", value: "Student-centered" }
     ],
-    plan: "Pro",
+    plan: "Talisay",
     features: [
       "Student Database (SIS)",
       "Class Management",

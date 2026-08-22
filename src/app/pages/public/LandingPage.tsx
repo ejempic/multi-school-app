@@ -120,9 +120,10 @@ export function LandingPage() {
   // Define subscription plans with their features
   const subscriptionPlans = [
     {
-      name: "Basic",
+      name: "Sampaguita",
       description: "Perfect for small schools getting started",
       color: "blue",
+      image: "/plans/sampaguita.png",
       features: [
         "Student Database (SIS)",
         "Class Management",
@@ -132,10 +133,11 @@ export function LandingPage() {
       ],
     },
     {
-      name: "Pro",
+      name: "Talisay",
       description: "Great for growing schools",
       color: "purple",
       popular: true,
+      image: "/plans/talisay.png",
       features: [
         "Student Database (SIS)",
         "Class Management",
@@ -148,9 +150,10 @@ export function LandingPage() {
       ],
     },
     {
-      name: "Enterprise",
+      name: "Yakal",
       description: "Complete solution for established schools",
       color: "amber",
+      image: "/plans/yakal.png",
       features: [
         "Student Database (SIS)",
         "Class Management",
@@ -162,6 +165,23 @@ export function LandingPage() {
         "Tuition & Billing",
         "Communication Suite",
         "Sick Leaves Management",
+        "PACE Learning System",
+        "Behavior Management (Merits/Demerits)",
+        "ID Scanner",
+        "Clinic Management",
+        "Library Management",
+        "Advanced Authentication",
+      ],
+    },
+    {
+      name: "Narra",
+      description: "Premium school operations with maximum coverage",
+      color: "slate",
+      image: "/plans/narra.png",
+      features: [
+        "Everything in Yakal",
+        "Registrar",
+        "Cashier",
         "PACE Learning System",
         "Behavior Management (Merits/Demerits)",
         "ID Scanner",
@@ -193,6 +213,11 @@ export function LandingPage() {
         bg: "bg-amber-50",
         text: "text-amber-700",
         border: "border-amber-200",
+      },
+      slate: {
+        bg: "bg-slate-50",
+        text: "text-slate-700",
+        border: "border-slate-200",
       },
     };
     return colorMap[color] || colorMap.blue;
@@ -350,7 +375,7 @@ export function LandingPage() {
           </div>
 
           {/* Plans Overview Cards */}
-          <div className="mb-12 grid gap-6 lg:grid-cols-3">
+          <div className="mb-12 grid gap-6 lg:grid-cols-4">
             {subscriptionPlans.map((plan, index) => {
               const colors = getColorClasses(plan.color);
               return (
@@ -362,6 +387,18 @@ export function LandingPage() {
                       : "border-slate-200"
                   }`}
                 >
+                  <div className="border-b bg-slate-950/95 p-4">
+                    <div className="flex items-center justify-center rounded-xl border border-white/10 bg-black/90 p-4">
+                      <img
+                        src={plan.image}
+                        alt={`${plan.name} plan artwork`}
+                        className="h-24 w-full max-w-[220px] object-contain"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  </div>
                   {plan.popular && (
                     <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 py-1 text-xs font-semibold rounded-bl-lg">
                       Most Popular

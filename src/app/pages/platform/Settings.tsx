@@ -95,7 +95,7 @@ export function Settings() {
   // Dialog States
   const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
-  const [selectedPlanUpgrade, setSelectedPlanUpgrade] = useState<"Basic" | "Pro" | "Enterprise">(currentTenant?.plan || "Basic");
+  const [selectedPlanUpgrade, setSelectedPlanUpgrade] = useState<"Sampaguita" | "Talisay" | "Yakal" | "Narra">(currentTenant?.plan || "Sampaguita");
   
   // Payment Method State
   const [paymentMethod, setPaymentMethod] = useState<"Credit Card" | "GCash" | "Cash" | "Bank Deposit" | "None">("Credit Card");
@@ -281,7 +281,7 @@ export function Settings() {
                 <div className="flex items-center justify-between">
                     <div>
                         <CardTitle>Current Plan</CardTitle>
-                        <CardDescription>You are currently subscribed to the <span className="font-semibold text-blue-600">{currentTenant.plan || "Basic"}</span> plan.</CardDescription>
+                        <CardDescription>You are currently subscribed to the <span className="font-semibold text-blue-600">{currentTenant.plan || "Sampaguita"}</span> plan.</CardDescription>
                     </div>
                     <Badge variant="success">Active</Badge>
                 </div>
@@ -341,7 +341,7 @@ export function Settings() {
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="space-y-4">
-                            {["Basic", "Pro", "Enterprise"].map((plan) => (
+                            {["Sampaguita", "Talisay", "Yakal", "Narra"].map((plan) => (
                                 <div 
                                     key={plan}
                                     className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -357,15 +357,17 @@ export function Settings() {
                                             {currentTenant?.plan === plan && <Badge variant="secondary" className="text-xs">Current</Badge>}
                                         </div>
                                         <div className="text-sm text-muted-foreground">
-                                            {plan === "Basic" ? "Essential features for small schools" : 
-                                             plan === "Pro" ? "Advanced tools for growing instutions" : 
-                                             "Full suite for large organizations"}
+                                            {plan === "Sampaguita" ? "Essential features for small schools" : 
+                                             plan === "Talisay" ? "Advanced tools for growing institutions" : 
+                                             plan === "Yakal" ? "Expanded operations for mature schools" :
+                                             "Premium suite with the widest coverage"}
                                         </div>
                                     </div>
                                     <div className="font-bold">
-                                        {plan === "Basic" ? "$99/mo" : 
-                                         plan === "Pro" ? "$199/mo" : 
-                                         "$499/mo"}
+                                        {plan === "Sampaguita" ? "$99/mo" : 
+                                         plan === "Talisay" ? "$199/mo" : 
+                                         plan === "Yakal" ? "$299/mo" :
+                                         "$399/mo"}
                                     </div>
                                 </div>
                             ))}

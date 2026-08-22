@@ -15,14 +15,24 @@ export function PlanManagement() {
         subtitle="Overview of available feature packages."
       />
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {plans.map((plan) => (
-          <Card key={plan.name} className={`flex flex-col ${plan.name === 'Enterprise' ? 'border-purple-200 shadow-purple-100' : ''}`}>
-            <CardHeader>
-              <div className="flex items-center gap-2 mb-2">
+          <Card key={plan.name} className={`flex flex-col overflow-hidden ${plan.name === 'Narra' ? 'border-purple-200 shadow-purple-100' : ''}`}>
+            <div className="border-b bg-slate-950/95 p-4">
+              <div className="flex items-center justify-center rounded-xl border border-white/10 bg-black/90 p-4">
+                <img
+                  src={plan.image}
+                  alt={`${plan.name} plan artwork`}
+                  className="h-28 w-full max-w-[240px] object-contain"
+                />
+              </div>
+            </div>
+            <CardHeader className="space-y-3">
+              <div className="flex items-start gap-2">
                 <div className={`p-2 rounded-lg ${
-                    plan.name === 'Basic' ? 'bg-slate-100 text-slate-600' :
-                    plan.name === 'Pro' ? 'bg-blue-100 text-blue-600' :
+                    plan.name === 'Sampaguita' ? 'bg-slate-100 text-slate-600' :
+                    plan.name === 'Talisay' ? 'bg-blue-100 text-blue-600' :
+                    plan.name === 'Yakal' ? 'bg-amber-100 text-amber-600' :
                     'bg-purple-100 text-purple-600'
                 }`}>
                     <plan.icon className="h-5 w-5" />

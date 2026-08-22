@@ -32,13 +32,13 @@ export function TenantManagement() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Form State
-  const [editPlan, setEditPlan] = useState<string>("Basic");
+  const [editPlan, setEditPlan] = useState<string>("Sampaguita");
   const [editFeatures, setEditFeatures] = useState<string[]>([]);
   const [editTheme, setEditTheme] = useState<Tenant['theme']>(DEFAULT_THEME);
 
   const handleEditClick = (tenant: Tenant) => {
     setSelectedTenant(tenant);
-    setEditPlan(tenant.plan || "Basic");
+    setEditPlan(tenant.plan || "Sampaguita");
     setEditFeatures(tenant.features || []);
     setEditTheme(tenant.theme || DEFAULT_THEME);
     setIsDialogOpen(true);
@@ -46,6 +46,10 @@ export function TenantManagement() {
 
   const handleResetTheme = () => {
     setEditTheme(DEFAULT_THEME);
+  };
+
+  const handleSetDefaultPlan = () => {
+    setEditFeatures(PLAN_FEATURES[editPlan] || []);
   };
 
   const handleSave = () => {
@@ -131,7 +135,12 @@ export function TenantManagement() {
                   </div>
                   <div className="text-sm text-slate-600 flex justify-between items-center">
                       <span>Plan</span>
-                      <Badge variant={tenant.plan === 'Enterprise' ? 'info' : tenant.plan === 'Pro' ? 'success' : 'muted'}>{tenant.plan || 'Basic'}</Badge>
+                      <Badge variant={
+                        tenant.plan === 'Narra' ? 'info' :
+                        tenant.plan === 'Yakal' ? 'success' :
+                        tenant.plan === 'Talisay' ? 'warning' :
+                        'muted'
+                      }>{tenant.plan || 'Sampaguita'}</Badge>
                   </div>
               </div>
 
@@ -175,7 +184,7 @@ export function TenantManagement() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="!flex !flex-col sm:max-w-[640px] !max-h-[85vh] !overflow-hidden">
           <DialogHeader>
             <DialogTitle>Edit Tenant Configuration</DialogTitle>
             <DialogDescription>
@@ -183,22 +192,26 @@ export function TenantManagement() {
             </DialogDescription>
           </DialogHeader>
           
-          <div className="grid gap-6 py-4">
+          <div className="grid flex-1 min-h-0 gap-6 overflow-y-auto py-4 pr-2 overscroll-contain">
             <div className="grid gap-2">
               <Label htmlFor="plan">Subscription Plan</Label>
               <Select value={editPlan} onValueChange={(val) => {
                   setEditPlan(val);
                   setEditFeatures(PLAN_FEATURES[val] || []);
-              }}>
+                }}>
                 <SelectTrigger id="plan">
                   <SelectValue placeholder="Select a plan" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Basic">Basic - Core Admin</SelectItem>
-                  <SelectItem value="Pro">Pro - Fiscal & Academic</SelectItem>
-                  <SelectItem value="Enterprise">Enterprise - Full Suite</SelectItem>
+                  <SelectItem value="Sampaguita">Sampaguita - Core Admin</SelectItem>
+                  <SelectItem value="Talisay">Talisay - Fiscal & Academic</SelectItem>
+                  <SelectItem value="Yakal">Yakal - Expanded Operations</SelectItem>
+                  <SelectItem value="Narra">Narra - Premium Suite</SelectItem>
                 </SelectContent>
               </Select>
+              <Button variant="outline" className="w-fit" onClick={handleSetDefaultPlan}>
+                Reset Plan Defaults
+              </Button>
             </div>
             
             <div className="space-y-3">
@@ -282,7 +295,7 @@ export function TenantManagement() {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="shrink-0 border-t pt-4">
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSave}>
                 <Save className="mr-2 h-4 w-4" /> Save Changes

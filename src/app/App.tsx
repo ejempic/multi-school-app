@@ -276,10 +276,14 @@ export default function App() {
       {/* Public routes */}
       <Route path="/" element={
         !isLoggedIn ? (
-          <TenantLandingPage
-            tenant={currentTenant}
-            onLogin={() => navigate("/login")}
-          />
+          currentTenant?.id === "admin" ? (
+            <Navigate to="/login" replace />
+          ) : (
+            <TenantLandingPage
+              tenant={currentTenant}
+              onLogin={() => navigate("/login")}
+            />
+          )
         ) : isCoffeeTableMode ? (
           <div 
             className="min-h-screen"
@@ -373,21 +377,6 @@ export default function App() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {userRole === 'admin' && (
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => navigate("/student-scanner")}
-                        className="hidden md:flex items-center gap-2"
-                        style={{
-                            borderColor: currentTenant?.theme?.accent && currentTenant.theme.accent.startsWith('#') ? currentTenant.theme.accent : undefined,
-                            color: currentTenant?.theme?.accent && currentTenant.theme.accent.startsWith('#') ? currentTenant.theme.accent : undefined,
-                        }}
-                      >
-                        <Barcode className="h-4 w-4" />
-                        <span className="text-xs">ID Scanner</span>
-                      </Button>
-                    )}
                     <div className="text-right hidden sm:block">
                       <p className="text-sm font-medium" style={{ color: theme.textColor }}>{userData?.name}</p>
                       <p className="text-xs" style={{ color: theme.subTextColor }}>{userData?.username}</p>

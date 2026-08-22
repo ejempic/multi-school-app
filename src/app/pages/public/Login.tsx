@@ -173,7 +173,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                 </div>
                 
                 <Button className="w-full" onClick={() => handleLogin("admin")}>
-                  Login as School Admin
+                  Login as Platform Admin
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
                   Please continue without username and password for testing.
@@ -386,17 +386,19 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
           </CardContent>
         </Card>
 
-        <div className="text-center mt-6 pt-6 border-t border-gray-300">
-          <p className="text-sm text-gray-600 mb-3">Need to check in students?</p>
-          <Button 
-            variant="outline"
-            className="w-full"
-            onClick={() => onNavigateToScanner && onNavigateToScanner()}
-          >
-            <Barcode className="h-4 w-4 mr-2" />
-            Go to Student ID Scanner
-          </Button>
-        </div>
+        {currentTenant?.id !== "admin" && (
+          <div className="text-center mt-6 pt-6 border-t border-gray-300">
+            <p className="text-sm text-gray-600 mb-3">Need to check in students?</p>
+            <Button 
+              variant="outline"
+              className="w-full"
+              onClick={() => onNavigateToScanner && onNavigateToScanner()}
+            >
+              <Barcode className="h-4 w-4 mr-2" />
+              Go to Student ID Scanner
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
