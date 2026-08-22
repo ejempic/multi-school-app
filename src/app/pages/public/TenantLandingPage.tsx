@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
@@ -143,6 +143,7 @@ export function TenantLandingPage({ tenant, onLogin }: TenantLandingPageProps) {
   const secondary = tenant.theme?.secondary || "#1d4ed8";
   const accent = tenant.theme?.accent || "#0ea5e9";
   const background = tenant.theme?.background || "#f8fafc";
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const content = mergeContent(fallbackContent, contentMap[tenant.id] as Partial<LandingContent> | undefined);
   const heroHeadline = content.hero.headline.replace("{schoolName}", tenant.name);
@@ -169,38 +170,67 @@ export function TenantLandingPage({ tenant, onLogin }: TenantLandingPageProps) {
     favicon.href = tenant.logo;
   }, [tenant.name, tenant.logo]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 24);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900" style={{ backgroundColor: background }}>
-      <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          isScrolled ? "border-b bg-white/92 shadow-sm backdrop-blur" : "border-b border-transparent bg-transparent"
+        }`}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 lg:px-6">
           <a href="#home" className="flex min-w-0 items-center gap-3">
             {tenant.logo ? (
               <img src={tenant.logo} alt={`${tenant.name} logo`} className="h-12 w-12 shrink-0 object-contain" />
             ) : (
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-sm font-bold text-white">
+              <div
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-white ${
+                  isScrolled ? "bg-slate-900" : "bg-white/15 backdrop-blur-sm"
+                }`}
+              >
                 SC
               </div>
             )}
             <div className="min-w-0 leading-tight">
-              <p className="truncate text-sm font-bold" style={{ color: primary }}>
+              <p
+                className={`truncate text-sm font-bold transition-colors ${isScrolled ? "" : "text-white"}`}
+                style={isScrolled ? { color: primary } : undefined}
+              >
                 {tenant.name}
               </p>
-              <p className="truncate text-xs text-slate-500">{tenant.tagline || "School domain"}</p>
+              <p className={`truncate text-xs transition-colors ${isScrolled ? "text-slate-500" : "text-white/75"}`}>
+                {tenant.tagline || "School domain"}
+              </p>
             </div>
           </a>
 
-          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-600 lg:flex">
+          <nav
+            className={`hidden items-center gap-6 text-sm font-medium transition-colors lg:flex ${
+              isScrolled ? "text-slate-600" : "text-white/88"
+            }`}
+          >
             {content.navigation.map((item) => (
-              <a key={item.label} href={item.href} className="transition-colors hover:text-slate-950">
+              <a
+                key={item.label}
+                href={item.href}
+                className={`transition-colors ${isScrolled ? "hover:text-slate-950" : "hover:text-white"}`}
+              >
                 {item.label}
               </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" asChild>
-              <a href="#contact">Contact</a>
-            </Button>
             <Button onClick={onLogin} className="gap-2" style={{ backgroundColor: secondary }}>
               Login
               <ArrowRight className="h-4 w-4" />
@@ -210,60 +240,61 @@ export function TenantLandingPage({ tenant, onLogin }: TenantLandingPageProps) {
       </header>
 
       <main id="home">
-        <section className="border-b bg-gradient-to-b from-white via-slate-50 to-slate-100">
-          <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:px-6 lg:py-16">
-            <div className="order-3 flex flex-col justify-center lg:order-1">
-              <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 shadow-sm">
-                <Sparkles className="h-4 w-4" style={{ color: primary }} />
+        <section className="relative overflow-hidden border-b">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${content.hero.imageUrl})` }}
+          />
+          <div className="absolute inset-0 bg-slate-950/45" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(90deg, rgba(15,23,42,0.82) 0%, rgba(15,23,42,0.62) 38%, rgba(15,23,42,0.28) 70%, rgba(15,23,42,0.16) 100%)`,
+            }}
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-32"
+            style={{ background: "linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(15,23,42,0.42) 100%)" }}
+          />
+
+          <div className="relative mx-auto flex min-h-[80vh] max-w-7xl flex-col justify-center px-4 py-14 lg:px-6 lg:py-20">
+            <div className="max-w-3xl">
+              <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-sm backdrop-blur-sm">
+                <Sparkles className="h-4 w-4" style={{ color: accent }} />
                 {content.hero.eyebrow}
               </div>
 
-              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-slate-950 lg:text-6xl">
+              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-white lg:text-6xl">
                 {heroHeadline}
               </h1>
-              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">{content.hero.tagline}</p>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">{content.hero.intro}</p>
+              <p className="mt-4 max-w-2xl text-lg leading-8 text-white/88">{content.hero.tagline}</p>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-white/80">{content.hero.intro}</p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button size="lg" asChild style={{ backgroundColor: secondary }}>
                   <a href="#contact">{content.hero.primaryCta}</a>
                 </Button>
-                <Button size="lg" variant="outline" asChild>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  asChild
+                  className="border-white/25 bg-white/10 text-white hover:bg-white/16 hover:text-white"
+                >
                   <a href="#about">{content.hero.secondaryCta}</a>
                 </Button>
               </div>
-
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                {quickStats.map((stat) => (
-                  <Card key={stat.label} className="border-none bg-white/90 shadow-sm">
-                    <CardContent className="p-4">
-                      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{stat.label}</p>
-                      <p className="mt-2 text-lg font-bold text-slate-900">{stat.value}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
             </div>
 
-            <Card className="order-1 overflow-hidden border-none bg-white/95 shadow-xl lg:order-2">
-              <div className="relative aspect-[4/3]">
-                <img
-                  src={content.hero.imageUrl}
-                  alt={content.hero.imageAlt}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-slate-950/10 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em]">
-                    <BadgeInfo className="h-4 w-4" />
-                    School Snapshot
-                  </div>
-                  <p className="max-w-xl text-sm leading-6 text-white/85">
-                    {tenant.about || content.about.history}
-                  </p>
-                </div>
-              </div>
-            </Card>
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {quickStats.map((stat) => (
+                <Card key={stat.label} className="border border-white/12 bg-white/12 shadow-sm backdrop-blur-sm">
+                  <CardContent className="p-4">
+                    <p className="text-xs font-medium uppercase tracking-wide text-white/70">{stat.label}</p>
+                    <p className="mt-2 text-lg font-bold text-white">{stat.value}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </section>
 
