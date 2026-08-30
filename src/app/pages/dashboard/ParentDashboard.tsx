@@ -13,6 +13,7 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
     {
       name: "Emma Watson",
       grade: "Grade 12",
+      photo: "https://images.unsplash.com/photo-1633381182794-01b10764b431?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50JTIwcG9ydHJhaXQlMjBmZW1hbGV8ZW58MXx8fHwxNzY3ODA2MTg4fDA&ixlib=rb-4.1.0&q=80&w=1080",
       gpa: 3.8,
       attendance: 96,
       tuitionStatus: "Paid",
@@ -29,6 +30,7 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
     {
       name: "Liam Johnson",
       grade: "Grade 11",
+      photo: "https://images.unsplash.com/photo-1624918201580-388eae33e802?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50JTIwcG9ydHJhaXQlMjBtYWxlfGVufDF8fHx8MTc2NzgwNjE4OXww&ixlib=rb-4.1.0&q=80&w=1080",
       gpa: 3.6,
       attendance: 94,
       tuitionStatus: "Pending",
@@ -54,9 +56,20 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
 
       {childrenData.map((child, index) => (
         <div key={index} className="space-y-4">
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl">{child.name}</h2>
-            <Badge variant="outline">{child.grade}</Badge>
+          <div className="flex flex-col items-center gap-3 px-4 sm:flex-row sm:items-center sm:px-0">
+            <div className="aspect-square w-full max-w-56 shrink-0 overflow-hidden rounded-full bg-slate-100 shadow-sm ring-4 ring-white sm:h-16 sm:w-16 sm:max-w-none">
+              <img
+                src={child.photo}
+                alt={child.name}
+                className="h-full w-full rounded-full object-cover"
+              />
+            </div>
+            <div className="min-w-0 space-y-1 text-center sm:text-left">
+              <h2 className="truncate text-2xl font-black text-slate-900 sm:text-2xl">{child.name}</h2>
+              <Badge variant="outline" className="w-fit rounded-full bg-white px-3 py-1 text-sm">
+                {child.grade}
+              </Badge>
+            </div>
           </div>
 
           {/* Stats Grid */}

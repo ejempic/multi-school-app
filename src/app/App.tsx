@@ -175,7 +175,7 @@ export default function App() {
       
       // Admin / Config
       { id: "parents" as View, label: "Parent Accounts", icon: Users, roles: ["admin", "registrar", "cashier"], category: "ADMINISTRATION" },
-      { id: "pace-management" as View, label: "PACE Config", icon: Settings, roles: ["admin", "teacher", "parent"], category: "ADMINISTRATION" },
+      { id: "pace-management" as View, label: "PACE Config", icon: Settings, roles: ["admin", "teacher"], category: "ADMINISTRATION" },
       { id: "settings" as View, label: "School Settings", icon: Settings, roles: ["admin"], category: "ADMINISTRATION" },
     ];
 
