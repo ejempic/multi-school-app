@@ -1,6 +1,6 @@
 import { Button } from "@/app/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/app/components/ui/card";
-import { GraduationCap, Users, BookOpen, Mail, PhoneCall, Check, X } from "lucide-react";
+import { GraduationCap, Users, BookOpen, Mail, PhoneCall, ClipboardList, Receipt } from "lucide-react";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { Textarea } from "@/app/components/ui/textarea";
@@ -95,6 +95,20 @@ export function LandingPage() {
       image: "/feature-images/tuition.jpg",
     },
     {
+      icon: ClipboardList,
+      title: "Registrar Management",
+      description: "Handle enrollment records, student documents, and academic requests in one place.",
+      longDescription: "Support registrar workflows such as enrollment validation, section placement, credential review, student records maintenance, and school document requests without relying on scattered spreadsheets.",
+      image: "/feature-images/student_staff.jpg",
+    },
+    {
+      icon: Receipt,
+      title: "Cashier Management",
+      description: "Track collections, payment history, and school-issued billing with better control.",
+      longDescription: "Give cashiers a clear workspace for receivables, payment posting, invoice handling, and daily transaction monitoring so finance operations stay organized and auditable.",
+      image: "/feature-images/tuition.jpg",
+    },
+    {
       icon: BookOpen,
       title: "Library & Clinic Management",
       description: "Digitize library checkouts and clinic visits.",
@@ -116,112 +130,6 @@ export function LandingPage() {
       image: "/feature-images/pace.jpg",
     },
   ];
-
-  // Define subscription plans with their features
-  const subscriptionPlans = [
-    {
-      name: "Sampaguita",
-      description: "Perfect for small schools getting started",
-      color: "blue",
-      image: "/plans/sampaguita.png",
-      features: [
-        "Student Database (SIS)",
-        "Class Management",
-        "Attendance Tracking",
-        "Teacher Portal Login",
-        "Parent Portal Login",
-      ],
-    },
-    {
-      name: "Talisay",
-      description: "Great for growing schools",
-      color: "purple",
-      popular: true,
-      image: "/plans/talisay.png",
-      features: [
-        "Student Database (SIS)",
-        "Class Management",
-        "Attendance Tracking",
-        "Teacher Portal Login",
-        "Parent Portal Login",
-        "Student Portal Login",
-        "Grading & Report Cards",
-        "Communication Suite",
-      ],
-    },
-    {
-      name: "Yakal",
-      description: "Complete solution for established schools",
-      color: "amber",
-      image: "/plans/yakal.png",
-      features: [
-        "Student Database (SIS)",
-        "Class Management",
-        "Attendance Tracking",
-        "Teacher Portal Login",
-        "Parent Portal Login",
-        "Student Portal Login",
-        "Grading & Report Cards",
-        "Tuition & Billing",
-        "Communication Suite",
-        "Sick Leaves Management",
-        "PACE Learning System",
-        "Behavior Management (Merits/Demerits)",
-        "ID Scanner",
-        "Clinic Management",
-        "Library Management",
-        "Advanced Authentication",
-      ],
-    },
-    {
-      name: "Narra",
-      description: "Premium school operations with maximum coverage",
-      color: "slate",
-      image: "/plans/narra.png",
-      features: [
-        "Everything in Yakal",
-        "Registrar",
-        "Cashier",
-        "PACE Learning System",
-        "Behavior Management (Merits/Demerits)",
-        "ID Scanner",
-        "Clinic Management",
-        "Library Management",
-        "Advanced Authentication",
-      ],
-    },
-  ];
-
-  // Get all unique features across plans
-  const allFeatures = Array.from(
-    new Set(subscriptionPlans.flatMap((plan) => plan.features))
-  );
-
-  const getColorClasses = (color: string) => {
-    const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-      blue: {
-        bg: "bg-blue-50",
-        text: "text-blue-700",
-        border: "border-blue-200",
-      },
-      purple: {
-        bg: "bg-purple-50",
-        text: "text-purple-700",
-        border: "border-purple-200",
-      },
-      amber: {
-        bg: "bg-amber-50",
-        text: "text-amber-700",
-        border: "border-amber-200",
-      },
-      slate: {
-        bg: "bg-slate-50",
-        text: "text-slate-700",
-        border: "border-slate-200",
-      },
-    };
-    return colorMap[color] || colorMap.blue;
-  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -262,10 +170,6 @@ export function LandingPage() {
             <GraduationCap className="h-6 w-6 text-blue-600" />
             <span className="text-xl font-bold tracking-tight">Eskuwela</span>
           </div>
-          <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-            <a href="#features" className="hover:text-blue-600 transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-blue-600 transition-colors">Pricing</a>
-          </nav>
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -329,9 +233,9 @@ export function LandingPage() {
       <section id="features" className="bg-slate-50 px-4 py-14">
         <div className="container mx-auto">
           <div className="mb-12 text-center">
-            <h2 className="mb-3 text-3xl font-bold">Built for School Teams</h2>
+            <h2 className="mb-3 text-3xl font-bold">Designed for End-to-End School Operations</h2>
             <p className="mx-auto max-w-2xl text-slate-600">
-              Focus on what matters most: student growth, teacher support, and smooth daily operations.
+              Run academics, student services, registrar work, cashier operations, and parent communication from one connected platform.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -368,120 +272,72 @@ export function LandingPage() {
       <section id="pricing" className="bg-white px-4 py-16">
         <div className="container mx-auto">
           <div className="mb-12 text-center">
-            <h2 className="mb-3 text-3xl font-bold">Subscription Plans</h2>
+            <h2 className="mb-3 text-3xl font-bold">Simple Pricing</h2>
             <p className="mx-auto max-w-2xl text-slate-600">
-              Choose the perfect plan for your school. All plans include core features with additional capabilities as you scale.
+              We are focusing on straightforward pricing based on active student count, starting at PHP 40 per student.
             </p>
           </div>
 
-          {/* Plans Overview Cards */}
-          <div className="mb-12 grid gap-6 lg:grid-cols-4">
-            {subscriptionPlans.map((plan, index) => {
-              const colors = getColorClasses(plan.color);
-              return (
-                <Card
-                  key={index}
-                  className={`relative overflow-hidden border-2 transition-all ${
-                    plan.popular
-                      ? `${colors.border} ring-2 ring-offset-2 ring-${plan.color}-300`
-                      : "border-slate-200"
-                  }`}
-                >
-                  <div className="border-b bg-slate-950/95 p-4">
-                    <div className="flex items-center justify-center rounded-xl border border-white/10 bg-black/90 p-4">
-                      <img
-                        src={plan.image}
-                        alt={`${plan.name} plan artwork`}
-                        className="h-24 w-full max-w-[220px] object-contain"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
-                      />
-                    </div>
-                  </div>
-                  {plan.popular && (
-                    <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-500 to-purple-600 text-white px-3 py-1 text-xs font-semibold rounded-bl-lg">
-                      Most Popular
-                    </div>
-                  )}
-                  <CardHeader className={plan.popular ? colors.bg : ""}>
-                    <CardTitle className="text-xl">{plan.name}</CardTitle>
-                    <CardDescription>{plan.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <div className="mb-6">
-                      <div className={`text-sm font-medium ${colors.text}`}>
-                        {plan.features.length} features included
-                      </div>
-                    </div>
-                    <Button
-                      className="w-full"
-                      variant={plan.popular ? "default" : "outline"}
+          <Card className="mx-auto max-w-5xl overflow-hidden border-none shadow-lg">
+            <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="bg-slate-950 px-8 py-10 text-white">
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-blue-200">Starting Rate</p>
+                <div className="mt-4 flex items-end gap-2">
+                  <span className="text-5xl font-black leading-none">PHP 40</span>
+                  <span className="pb-1 text-lg font-medium text-slate-300">per student</span>
+                </div>
+                <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300">
+                  Pricing starts at PHP 40 per active student, giving schools a straightforward way to estimate cost as enrollment grows.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {[
+                    "Student information system",
+                    "Academic and attendance tools",
+                    "Registrar and cashier workflows",
+                    "Parent communication",
+                  ].map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-white/12 bg-white/8 px-3 py-1 text-xs font-medium text-slate-200"
                     >
-                      Choose Plan
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-
-          {/* Detailed Features Comparison */}
-          <div className="mt-16">
-            <h3 className="mb-8 text-center text-2xl font-bold">Feature Comparison</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b-2 border-slate-300">
-                    <th className="text-left py-4 px-4 font-bold text-slate-900 w-1/4">
-                      Feature
-                    </th>
-                    {subscriptionPlans.map((plan) => (
-                      <th
-                        key={plan.name}
-                        className="text-center py-4 px-4 font-bold text-slate-900"
-                      >
-                        {plan.name}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {allFeatures.map((feature, idx) => (
-                    <tr
-                      key={idx}
-                      className={`border-b border-slate-200 ${
-                        idx % 2 === 0 ? "bg-slate-50" : "bg-white"
-                      }`}
-                    >
-                      <td className="py-4 px-4 text-sm font-medium text-slate-900">
-                        {feature}
-                      </td>
-                      {subscriptionPlans.map((plan) => (
-                        <td
-                          key={`${plan.name}-${feature}`}
-                          className="text-center py-4 px-4"
-                        >
-                          {plan.features.includes(feature) ? (
-                            <Check className="h-5 w-5 text-green-600 mx-auto" />
-                          ) : (
-                            <X className="h-5 w-5 text-slate-300 mx-auto" />
-                          )}
-                        </td>
-                      ))}
-                    </tr>
+                      {item}
+                    </span>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 px-8 py-10">
+                <h3 className="text-2xl font-bold text-slate-900">What this means for your school</h3>
+                <div className="mt-6 grid gap-4">
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <p className="text-sm font-semibold text-slate-900">Simple to estimate</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      Multiply your active student count by PHP 40 to get your starting monthly baseline.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <p className="text-sm font-semibold text-slate-900">Built for growing schools</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      The model scales naturally as your enrollment changes, without forcing schools into artificial plan tiers.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <p className="text-sm font-semibold text-slate-900">Implementation depends on scope</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      Final pricing can still vary based on setup, rollout needs, and any school-specific customization.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </Card>
 
           {/* Call to Action */}
           <div className="mt-16 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12">
             <div className="max-w-2xl mx-auto">
               <h3 className="mb-3 text-2xl font-bold text-white text-center">Ready to Get in Touch?</h3>
               <p className="mb-8 text-blue-100 text-center">
-                Contact us to discuss your school's needs and explore which plan is right for you.
+                Contact us to discuss your school's needs and estimate pricing based on your student count.
               </p>
               
               <form onSubmit={handleSubmit} className="space-y-4 bg-white rounded-lg p-6">
