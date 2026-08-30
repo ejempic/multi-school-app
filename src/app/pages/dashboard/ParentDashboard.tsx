@@ -13,7 +13,7 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
     {
       name: "Emma Watson",
       grade: "Grade 12",
-      photo: "https://images.unsplash.com/photo-1633381182794-01b10764b431?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkZW50JTIwcG9ydHJhaXQlMjBmZW1hbGV8ZW58MXx8fHwxNzY3ODA2MTg4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      photo: "/feature-images/girl_photo.png",
       gpa: 3.8,
       attendance: 96,
       tuitionStatus: "Paid",
