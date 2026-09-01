@@ -30,6 +30,11 @@ import { Books } from "./pages/management/Books";
 import { LibraryManagement } from "./pages/management/LibraryManagement";
 import { Uniforms } from "./pages/management/Uniforms";
 import { Settings as SettingsComponent } from "./pages/platform/Settings";
+import {
+  EfficacyEvaluation,
+  SchoolwideStudentPerformance,
+  StudentRiskProfile,
+} from "./pages/insights/OperationalFeaturePages";
 import { Button } from "./components/ui/button";
 import { Toaster } from "./components/ui/sonner";
 import {
@@ -53,6 +58,9 @@ import {
   Library,
   Receipt,
   Shirt,
+  ClipboardCheck,
+  LineChart,
+  ShieldAlert,
 } from "lucide-react";
 
 // Helper to check brightness
@@ -75,8 +83,8 @@ const getContrastDetails = (hexColor?: string) => {
   };
 };
 
-type View = "dashboard" | "students" | "classes" | "grades" | "tuitions" | "announcements" | "calendar" | "parents" | "staff" | "attendance" | "phases" | "pace-management" | "sick-leaves" | "behavior" | "tenants" | "plans" | "clinic" | "books" | "library" | "uniforms" | "cashier" | "settings";
-type UserRole = "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | "registrar" | "cashier" | null;
+type View = "dashboard" | "students" | "classes" | "grades" | "tuitions" | "announcements" | "calendar" | "parents" | "staff" | "attendance" | "phases" | "pace-management" | "sick-leaves" | "behavior" | "tenants" | "plans" | "clinic" | "books" | "library" | "uniforms" | "cashier" | "settings" | "student-risk-profile" | "schoolwide-performance" | "efficacy-evaluation";
+type UserRole = "admin" | "teacher" | "parent" | "student" | "nurse" | "guidance" | "librarian" | "registrar" | "cashier" | null;
 
 interface UserData {
   name: string;
@@ -165,12 +173,12 @@ export default function App() {
       
       // Management
       { id: "students" as View, label: "Students", icon: Users, roles: ["admin", "teacher", "registrar", "cashier"], category: "MANAGEMENT" },
-      { id: "classes" as View, label: "Classes", icon: BookOpen, roles: ["admin", "teacher"], category: "MANAGEMENT" },
+      { id: "classes" as View, label: "Classroom", icon: BookOpen, roles: ["admin", "teacher", "parent", "student"], category: "MANAGEMENT" },
       { id: "tuitions" as View, label: "Tuitions", icon: DollarSign, roles: ["admin", "registrar", "cashier"], category: "MANAGEMENT" },
       { id: "cashier" as View, label: "Cashier", icon: Receipt, roles: ["admin", "cashier"], category: "MANAGEMENT" },
       { id: "books" as View, label: "Books", icon: BookOpen, roles: ["admin", "registrar", "cashier"], category: "MANAGEMENT" },
       { id: "uniforms" as View, label: "Uniforms", icon: Shirt, roles: ["admin", "registrar", "cashier"], category: "MANAGEMENT" },
-      { id: "staff" as View, label: "School Staff", icon: BookOpen, roles: ["admin"], category: "MANAGEMENT" },
+      { id: "staff" as View, label: "School Staff", icon: BookOpen, roles: ["admin", "registrar"], category: "MANAGEMENT" },
       { id: "sick-leaves" as View, label: "Sick Leaves", icon: Stethoscope, roles: ["admin", "teacher", "parent"], category: "MANAGEMENT" },
       
       // Admin / Config
@@ -178,6 +186,18 @@ export default function App() {
       { id: "pace-management" as View, label: "PACE Config", icon: Settings, roles: ["admin", "teacher"], category: "ADMINISTRATION" },
       { id: "settings" as View, label: "School Settings", icon: Settings, roles: ["admin"], category: "ADMINISTRATION" },
     ];
+
+    if (currentTenant?.features?.includes("School-wide Student Performance")) {
+      items.push({ id: "schoolwide-performance" as View, label: "Student Performance", icon: LineChart, roles: ["admin", "teacher"], category: "OVERVIEW" });
+    }
+
+    if (currentTenant?.features?.includes("Student Risk Profile")) {
+      items.push({ id: "student-risk-profile" as View, label: "Student Risk Profile", icon: ShieldAlert, roles: ["admin", "teacher", "nurse", "guidance"], category: "STUDENT SUPPORT" });
+    }
+
+    if (currentTenant?.features?.includes("Efficacy & Evaluation")) {
+      items.push({ id: "efficacy-evaluation" as View, label: "Efficacy & Evaluation", icon: ClipboardCheck, roles: ["admin", "registrar"], category: "ADMINISTRATION" });
+    }
 
     // Conditionally add modules based on tenant features
     if (currentTenant?.features?.includes("Clinic Management")) {
@@ -264,6 +284,12 @@ export default function App() {
         return <PlanManagement />;
       case "settings":
         return <SettingsComponent />;
+      case "student-risk-profile":
+        return <StudentRiskProfile />;
+      case "schoolwide-performance":
+        return <SchoolwideStudentPerformance />;
+      case "efficacy-evaluation":
+        return <EfficacyEvaluation />;
       default:
         return <Dashboard />;
     }
@@ -422,7 +448,7 @@ export default function App() {
                         return acc;
                       }, {} as Record<string, any[]>);
 
-                      const categoryOrder = ["PLATFORM", "OVERVIEW", "COMMUNICATION", "MANAGEMENT", "ACADEMICS", "ADMINISTRATION"];
+                      const categoryOrder = ["PLATFORM", "OVERVIEW", "COMMUNICATION", "STUDENT SUPPORT", "MANAGEMENT", "ACADEMICS", "ADMINISTRATION"];
 
                       return Object.entries(grouped)
                         .sort(([catA], [catB]) => {

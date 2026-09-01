@@ -8,7 +8,7 @@ import { GraduationCap, Barcode } from "lucide-react";
 import { useTenant } from "@/app/contexts/TenantContext";
 
 interface LoginProps {
-  onLogin: (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | "registrar" | "cashier", userData: any) => void;
+  onLogin: (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "guidance" | "librarian" | "registrar" | "cashier", userData: any) => void;
   onNavigateToScanner?: () => void;
 }
 
@@ -17,7 +17,7 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
   const [password, setPassword] = useState("");
   const { currentTenant } = useTenant();
 
-  const handleLogin = (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "librarian" | "registrar" | "cashier") => {
+  const handleLogin = (role: "admin" | "teacher" | "parent" | "student" | "nurse" | "guidance" | "librarian" | "registrar" | "cashier") => {
     // Mock login - in a real app, this would validate credentials
     const mockUsers = {
       admin: {
@@ -47,6 +47,12 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
         name: "Nurse Joy",
         username: "nurse",
         role: "nurse",
+      },
+      guidance: {
+        name: "Guidance Counselor",
+        username: "guidance",
+        role: "guidance",
+        department: "Guidance Office",
       },
       librarian: {
         name: "Madam Pinta",
@@ -142,6 +148,9 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                       <TabsTrigger value="cashier" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Cashier</TabsTrigger>
                       {currentTenant?.features?.includes("Clinic Management") && (
                           <TabsTrigger value="nurse" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Clinic</TabsTrigger>
+                      )}
+                      {currentTenant?.features?.includes("Student Risk Profile") && (
+                          <TabsTrigger value="guidance" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Guidance</TabsTrigger>
                       )}
                       {currentTenant?.features?.includes("Library Management") && (
                           <TabsTrigger value="librarian" className="h-10 flex-none rounded-full bg-white/70 px-4 font-semibold data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:shadow-md">Library</TabsTrigger>
@@ -348,6 +357,35 @@ export function Login({ onLogin, onNavigateToScanner }: LoginProps) {
                 </div>
                 <Button className="w-full" onClick={() => handleLogin("nurse")}>
                   Login as Clinic Nurse
+                </Button>
+                <p className="text-xs text-gray-500 text-center">
+                  Please continue without username and password for testing.
+                </p>
+              </TabsContent>
+
+              <TabsContent value="guidance" className="space-y-4 mt-4">
+                <div>
+                  <Label htmlFor="guidance-username">Username</Label>
+                  <Input
+                    id="guidance-username"
+                    type="text"
+                    placeholder="guidance"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="guidance-password">Password</Label>
+                  <Input
+                    id="guidance-password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <Button className="w-full" onClick={() => handleLogin("guidance")}>
+                  Login as Guidance
                 </Button>
                 <p className="text-xs text-gray-500 text-center">
                   Please continue without username and password for testing.

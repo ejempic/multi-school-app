@@ -70,12 +70,15 @@ export const tenants: Tenant[] = [
       "Grading & Report Cards",
       "Tuition & Billing",
       "Communication Suite",
+      "Efficacy & Evaluation",
       "Sick Leaves Management",
       "PACE Learning System",
       "Behavior Management (Merits/Demerits)",
       "ID Scanner",
       "Clinic Management",
       "Library Management",
+      "School-wide Student Performance",
+      "Student Risk Profile",
       "Advanced Authentication"
     ],
     theme: {
@@ -121,7 +124,8 @@ export const tenants: Tenant[] = [
       "Parent Portal Login",
       "Student Portal Login",
       "Grading & Report Cards",
-      "Communication Suite"
+      "Communication Suite",
+      "School-wide Student Performance"
     ],
     theme: {
       primary: "#7f1d1d", // red-900

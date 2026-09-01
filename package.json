@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "dev:setup": "bash scripts/setup-local-dev.sh",
+    "dev:setup": "node scripts/setup-local-dev.mjs",
     "dev:https": "npm run dev:setup && vite --host 127.0.0.1 --port 5173",
     "dev:proxy": "node scripts/local-https-proxy.mjs --host 127.0.0.1 --port 443 --target-host 127.0.0.1 --target-port 5173",
     "dev:valet": "bash scripts/dev-valet.sh"

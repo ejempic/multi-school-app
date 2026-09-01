@@ -12,12 +12,15 @@ export const AVAILABLE_FEATURES = [
     "Grading & Report Cards",
     "Tuition & Billing",
     "Communication Suite",
+    "Efficacy & Evaluation",
     "Sick Leaves Management",
     "PACE Learning System",
     "Behavior Management (Merits/Demerits)",
     "ID Scanner",
     "Clinic Management",
     "Library Management",
+    "School-wide Student Performance",
+    "Student Risk Profile",
     "Advanced Authentication"
   ];
   
@@ -40,6 +43,7 @@ export const PLAN_FEATURES: Record<string, string[]> = {
       "Grading & Report Cards",
       "Tuition & Billing",
       "Communication Suite",
+      "School-wide Student Performance",
       "Sick Leaves Management"
     ],
     Yakal: [
@@ -54,12 +58,15 @@ export const PLAN_FEATURES: Record<string, string[]> = {
       "Grading & Report Cards",
       "Tuition & Billing",
       "Communication Suite",
+      "Efficacy & Evaluation",
       "Sick Leaves Management",
       "PACE Learning System",
       "Behavior Management (Merits/Demerits)",
       "ID Scanner",
       "Clinic Management",
       "Library Management",
+      "School-wide Student Performance",
+      "Student Risk Profile",
       "Advanced Authentication"
     ],
     Narra: [
@@ -71,6 +78,9 @@ export const PLAN_FEATURES: Record<string, string[]> = {
       "ID Scanner",
       "Clinic Management",
       "Library Management",
+      "School-wide Student Performance",
+      "Student Risk Profile",
+      "Efficacy & Evaluation",
       "Advanced Authentication"
     ]
   };

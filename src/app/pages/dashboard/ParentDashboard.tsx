@@ -3,6 +3,7 @@ import { Badge } from "@/app/components/ui/badge";
 import { Progress } from "@/app/components/ui/progress";
 import { Calendar, BookOpen, GraduationCap, DollarSign, TrendingUp, Users } from "lucide-react";
 import { PageHeader } from "@/app/components/ui/page-header";
+import { EvaluationFeedbackModal } from "@/app/components/EvaluationFeedbackModal";
 
 interface ParentDashboardProps {
   userData: any;
@@ -48,6 +49,7 @@ export function ParentDashboard({ userData }: ParentDashboardProps) {
 
   return (
     <div className="space-y-6">
+      <EvaluationFeedbackModal userRole="parent" userId={userData?.username} />
       <PageHeader
         icon={Users}
         title="Parent Portal"

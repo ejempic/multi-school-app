@@ -14,6 +14,7 @@ import {
 import { Button } from "@/app/components/ui/button";
 import { Badge } from "@/app/components/ui/badge";
 import { PageHeader } from "@/app/components/ui/page-header";
+import { EvaluationFeedbackModal } from "@/app/components/EvaluationFeedbackModal";
 
 interface StudentDashboardProps {
   userData: any;
@@ -40,6 +41,14 @@ export function StudentDashboard({ userData, onNavigate, onLogout }: StudentDash
       iconColor: "text-blue-100"
     },
     {
+      id: "classes",
+      title: "Classroom",
+      description: "Open class posts, resources, and seating",
+      icon: BookOpen,
+      color: "from-cyan-400 to-blue-500",
+      iconColor: "text-cyan-100"
+    },
+    {
       id: "grades",
       title: "My Report Cards",
       description: "Official transcripts and PACE scores",
@@ -59,6 +68,7 @@ export function StudentDashboard({ userData, onNavigate, onLogout }: StudentDash
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col p-6 lg:p-12">
+      <EvaluationFeedbackModal userRole="student" userId={userData?.username} />
       <PageHeader
         title={`Hi, ${userData?.name?.split(' ')[0]}!`}
         subtitle="Welcome back to your dashboard"

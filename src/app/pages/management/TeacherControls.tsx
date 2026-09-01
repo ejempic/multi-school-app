@@ -386,6 +386,10 @@ export function TeacherControls() {
     member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
     member.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const teacherCount = staff.filter(member => member.role.toLowerCase().includes("teacher")).length;
+  const assignedClassCount = staff.reduce((total, member) => total + member.classIds.length, 0);
+  const activeAccountCount = staff.filter(member => member.access.hasAccount && !member.access.isLocked).length;
+  const pendingAccountCount = staff.filter(member => !member.access.hasAccount).length;
 
   const handleUpdateAccess = (id: number, access: StaffMember["access"]) => {
     setStaff(staff.map(m => m.id === id ? { ...m, access } : m));
@@ -460,7 +464,7 @@ export function TeacherControls() {
       <PageHeader
         icon={User}
         title="Staff Management"
-        subtitle={`${tenantId} Academic & Non-Academic Personnel Directory`}
+        subtitle={`${tenantId} academic and non-academic staff directory with teacher assignments and access control.`}
         actions={
           <Dialog>
             <DialogTrigger asChild>
@@ -532,6 +536,46 @@ export function TeacherControls() {
           </Dialog>
         }
       />
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {[
+          { label: "Teacher Profiles", value: teacherCount, detail: "Faculty records managed here" },
+          { label: "Class Assignments", value: assignedClassCount, detail: "Linked subject and section duties" },
+          { label: "Active Accounts", value: activeAccountCount, detail: "Staff with portal access" },
+          { label: "Pending Access", value: pendingAccountCount, detail: "Staff waiting for account setup" },
+        ].map((item) => (
+          <ShadcnCard key={item.label} className="border-slate-200 bg-white shadow-sm">
+            <ShadcnCardContent className="p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
+              <p className="mt-2 text-3xl font-black text-slate-950">{item.value}</p>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{item.detail}</p>
+            </ShadcnCardContent>
+          </ShadcnCard>
+        ))}
+      </div>
+
+      <ShadcnCard className="border-blue-100 bg-blue-50/60 shadow-sm">
+        <ShadcnCardContent className="grid gap-4 p-5 md:grid-cols-3">
+          <div>
+            <p className="text-sm font-bold text-blue-950">Teacher assignments</p>
+            <p className="mt-1 text-sm leading-6 text-blue-800/80">
+              Assign classes, subject loads, and advisory sections directly from each teacher profile.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-blue-950">Registrar-ready records</p>
+            <p className="mt-1 text-sm leading-6 text-blue-800/80">
+              Keep staff details, roles, contact information, and academic background in one organized directory.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-blue-950">Access control</p>
+            <p className="mt-1 text-sm leading-6 text-blue-800/80">
+              Generate accounts, suspend access, and review credentials without leaving staff management.
+            </p>
+          </div>
+        </ShadcnCardContent>
+      </ShadcnCard>
 
       <ShadcnCard className="border-blue-50 shadow-sm overflow-hidden bg-white">
         <ShadcnCardContent className="p-0">
